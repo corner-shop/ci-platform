@@ -1,0 +1,47 @@
+{
+  "id": "/ci-platform/config-volume",
+  "cmd": null,
+  "cpus": 0.01,
+  "mem": 128,
+  "disk": 0,
+  "instances": 1,
+  "constraints": [
+    [
+      "hostname",
+      "LIKE",
+      "toaster.tinc-core-vpn"
+    ]
+  ],
+  "acceptedResourceRoles": [
+    "*"
+  ],
+  "container": {
+    "type": "DOCKER",
+    "volumes": [
+      {
+        "containerPath": "/config",
+        "hostPath": "/data/sync-service/folders/ci-platform/config-volume",
+        "mode": "RW"
+      }
+    ],
+    "docker": {
+      "image": "azulinho/ci-config-vol",
+      "network": "HOST",
+      "portMappings": [],
+      "privileged": false,
+      "parameters": [],
+      "forcePullImage": true
+    }
+  },
+  "env": {
+    "TEMPURL": "http://tempurl-endpoint.service.tinc-core-vpn/api?tempurl=jenkins_config_yml"
+  },
+  "portDefinitions": [
+    {
+      "port": 10006,
+      "protocol": "tcp",
+      "name": "default",
+      "labels": {}
+    }
+  ]
+}
