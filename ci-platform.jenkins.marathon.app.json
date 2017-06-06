@@ -1,0 +1,78 @@
+{
+  "id": "/ci-platform/jenkins",
+  "cmd": null,
+  "cpus": 0.01,
+  "mem": 1500,
+  "disk": 0,
+  "instances": 1,
+  "constraints": [
+    [
+      "hostname",
+      "LIKE",
+      "toaster.tinc-core-vpn"
+    ]
+  ],
+  "acceptedResourceRoles": [
+    "*"
+  ],
+  "container": {
+    "type": "DOCKER",
+    "volumes": [
+      {
+        "containerPath": "/config",
+        "hostPath": "/data/sync-service/folders/ci-platform/config-volume",
+        "mode": "RW"
+      },
+      {
+        "containerPath": "/var/lib/jenkins",
+        "hostPath": "/data/sync-service/folders/ci-platform/jenkins",
+        "mode": "RW"
+      },
+      {
+        "containerPath": "/var/log/jenkins",
+        "hostPath": "/data/sync-service/folders/ci-platform/jenkins-logs",
+        "mode": "RW"
+      }
+    ],
+    "docker": {
+      "image": "azulinho/ci-platform",
+      "network": "HOST",
+      "portMappings": [],
+      "privileged": false,
+      "parameters": [],
+      "forcePullImage": true
+    }
+  },
+  "env": {
+    "JAVA_OPTS": " -Djava.awt.headless=true ",
+    "JENKINS_HOME": "/var/lib/jenkins",
+    "LIBPROCESS_IP": "169.254.100.19"
+  },
+  "healthChecks": [
+    {
+      "gracePeriodSeconds": 300,
+      "intervalSeconds": 60,
+      "timeoutSeconds": 20,
+      "maxConsecutiveFailures": 3,
+      "port": 31002,
+      "path": "/login",
+      "protocol": "HTTP",
+      "ignoreHttp1xx": false
+    }
+  ],
+  "labels": {
+    "HAPROXY_1_PORT": "31003",
+    "HAPROXY_0_PORT": "31002",
+    "HAPROXY_0_GROUP": "external",
+    "HAPROXY_1_GROUP": "external",
+    "HAPROXY_1_VHOST": "jenkins-slave-port.service.tinc-core-vpn",
+    "HAPROXY_0_VHOST": "jenkins.service.tinc-core-vpn"
+  },
+  "portDefinitions": [
+    {
+      "port": 10007,
+      "protocol": "tcp",
+      "labels": {}
+    }
+  ]
+}
