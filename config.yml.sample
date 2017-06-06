@@ -1,0 +1,1620 @@
+# vim: ft=yaml:foldmethod=indent:foldenable
+#
+#
+# login details for the mesos framework
+ci_mesos:
+  principal: &ci_mesos_principal ''
+  password: &ci_mesos_password ''
+
+ec2_api_keys:
+# Jenkins will use the following API keys to connect to AWS
+# These are used by the Jenkins EC2 plugin to create Slaves on demand.
+  jenkins_master_key:
+    accessID: &jenkins_master_accessID 'XXXXXX'
+    secretKey: &jenkins_master_secretKey 'XXXXXXXXXXXXXXXXX'
+
+# cloud_pem_keys contains the list of PEMs used in our Cloud Providers
+cloud_pem_keys:
+  jenkins_slave_private_key: &jenkins_slave_private_key [
+    '-----BEGIN RSA PRIVATE KEY-----',
+    'MIIEpQIBAAKCAQEA6qfOGMFdy0ASutQpiOrY13KETHJeMt85TOyQBhVG2LGrxPvq',
+    'fa/U9NQD0kIRy0GmDBBOiS9RTfsgRhpXXzpESYP7GVt3/ZOLIUWEAEX9xzFYIqKm',
+    '/qy/eDDkOxIjfKj+VaGI/p+wkknfWea7EEKLc7RQO7VKM4Jn2dsAVP0Gu5bOGDB/',
+    'nI1WifR8MV+LI3QDJPo/YKRlqwEEZSMZ0MMGuh3DUzQd9jnqx9TJ1tVr+7jz9zSk',
+    'QFR4RMEhfngFDneWBZcnHyV5QYOndMlWy9uuDMkoGsL82BPycuG4eWrr3tTgyiIZ',
+    'NtmN6APiT03PG1XNYS3CL69rPQxAfog7eCkpdQIDAQABAoIBAH/4hdhQVDONPOmw',
+    '3PnzgdB1fpsmYCMEQ/6koKMApYN12cRy0l47LztaCL95ErUzlzfLCNmd+Yw6oU45',
+    '/V5Mq4MgPCeHD7g159F8VNHFWfJxAazZ4ZLQaRdGKqHgcYQBsbrHfqvGMQiGywz/',
+    'XRMwB1dRhdQaOV5ABxzzZ4nx9+MC/wbiJ2mW6oYFs8XSFZ3RRkCg5ljMJTgRrhjo',
+    'i7Ejq5OWQbROPPTfbPNPZwQiKYpC6fu4XqsYIpyR8IfQk1s+SP8urtss67eNtmPZ',
+    'E4hVKgt/q6zE3lfcspDEzUJ4k+80Sy67q5Dr1Z1joEy+U7prPuXVAs1JcGNUfTN9',
+    'JuYI3J0CgYEA9+oBRxt/43bPuPXTD4Lk4i8V6XDFRqg8Fqj3mrjE2KwHln5/2AbN',
+    'RcVb+FY0KZ1duIwXkLYJg8F1yE3LjrEk9dWtVvw1ZxicCF7rQdb1RkSaLOu2iuxt',
+    'INhyPs2dBSK6zX/0DPxqCZxKa/77gNRF5hMmPf5ikZrAKbJMgU/Y3icCgYEA8k8Y',
+    'ctTTDxAw4/R5kgaFJL463iTbdf4OlLaoQEW+yQ9XXg5BpcVG07vEWJmyqN7AKpMS',
+    'SV8NpvU4KLGSY50x0bEms88qRKcsAr/kFq4Odp5DOo5B+lBAKvmyKpugA7dk9T/c',
+    'DDWvFNYZCu3EJxBeTbVjDrzIpPf98Nmq+1JlWQMCgYEAxo5TsajTt9Frsv6nqS+z',
+    's3f0u7/HML0DSz7O+MttVQALH7x3FgT0mSHldDNOmdnguzLwmMVDP5RNijzMgJ9e',
+    'M8qMhzN+bfDm30lucJACZ+H//WRYElIjYQAaGDTDwt468OW/CDuNjd7wOCjDND5P',
+    'MWM66MH6HhXsPDkCTzstPVcCgYEAlyf2VXQkccok5Z9V011T45bz/C475YBmMik8',
+    'DlQz7xMt6lO0aigFxgHlO2wuAqBqemSizLiKOLPSo7gaXR/ruybqwNKkSI2Mq+5u',
+    '6CMOjLqvr7Ccwf0b+nMnzOKmUIswZLnAmLFIlhP1LVcjvUa9vXZA5CmqdRbrCDuR',
+    'KRS+emcCgYEA7+xUc5iIWK/WoqBZqAhywECvNDPtD/ezzljMikSZQD5ivcl/7QBL',
+    'ntKBuS0NoPOCLz4JG9PPdBayUKZfiblMW9LbW2zmuPMdIaVmW3nHY7QLkbbhR89m',
+    'Bg3QZCi/U7nxLW5Qf7oRUbpWhqvqomMR3VqroSTNags7ZOdjk30ywRE=',
+    '-----END RSA PRIVATE KEY-----'
+  ]
+
+  jenkins_slave_public_key: &jenkins_slave_public_key [
+    'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDqp84YwV3LQBK61CmI6tjXcoRMcl4y3zlM7JAGFUbYsavE++p9r9T01APSQhHLQaYMEE6JL1FN+yBGGldfOkRJg/sZW3f9k4shRYQARf3HMVgioqb+rL94MOQ7EiN8qP5VoYj+n7CSSd9Z5rsQQotztFA7tUozgmfZ2wBU/Qa7ls4YMH+cjVaJ9HwxX4sjdAMk+j9gpGWrAQRlIxnQwwa6HcNTNB32OerH1MnW1Wv7uPP3NKRAVHhEwSF+eAUOd5YFlycfJXlBg6d0yVbL264MySgawvzYE/Jy4bh5auve1ODKIhk22Y3oA+JPTc8bVc1hLcIvr2s9DEB+iDt4KSl1 jenkins@testbox'
+  ]
+
+
+# the jenkins block, contains the full set of configs for the jenkins box
+# including: jenkins version, installing plugins, defined views, jobs to
+# configure, pipelines to build, and jobs to be automatically built at
+# the end of the playbook
+jenkins:
+  # TODO make our docker image consume this version number
+  version: 2.0
+  deb_url: http://pkg.jenkins-ci.org/debian-rc/binary/jenkins_2.0_all.deb
+  dest: /opt/jenkins
+  lib: /var/lib/jenkins
+  # this url is also used by the Mesos plugin, so it must be accessible by
+  # the mesos slaves.
+  # Due to the way the mesos plugin callsback on random ports on the jenkins
+  # master, the docker instance must run with --net=host and the URL below
+  # should be the URL of our dockerhost
+  #
+  # it has to end with '/' or the slack plugin gets the URLs wrong.
+  jenkins_url: &jenkins_url "http://jenkins-ci-platform.marathon.mesos:31002/"
+  jvm_args: '  -XX:MaxPermSize=256m -Xmx1024m'
+  port: 31002
+  prefix: /jenkins
+  cli_dest: '/opt/jenkins/jenkins-cli.jar' # Jenkins CLI destination
+  updates_dest: '/opt/jenkins/updates_jenkins.json' # Jenkins updates file
+  numExecutors: 20
+  mode: 'NORMAL'
+  workspaceDir: '${ITEM_ROOTDIR}/workspace'
+  buildsDir: '${ITEM_ROOTDIR}/builds'
+  quietPeriod: 5
+  master_label: 'master'
+  plugins_dir: '/var/lib/jenkins/plugins'
+  connection_retries: 15
+  connection_retry_delay: 20
+  slaveAgentPort: 31003
+  jenkins_master_private_key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEpQIBAAKCAQEA6qfOGMFdy0ASutQpiOrY13KETHJeMt85TOyQBhVG2LGrxPvq
+    fa/U9NQD0kIRy0GmDBBOiS9RTfsgRhpXXzpESYP7GVt3/ZOLIUWEAEX9xzFYIqKm
+    /qy/eDDkOxIjfKj+VaGI/p+wkknfWea7EEKLc7RQO7VKM4Jn2dsAVP0Gu5bOGDB/
+    nI1WifR8MV+LI3QDJPo/YKRlqwEEZSMZ0MMGuh3DUzQd9jnqx9TJ1tVr+7jz9zSk
+    QFR4RMEhfngFDneWBZcnHyV5QYOndMlWy9uuDMkoGsL82BPycuG4eWrr3tTgyiIZ
+    NtmN6APiT03PG1XNYS3CL69rPQxAfog7eCkpdQIDAQABAoIBAH/4hdhQVDONPOmw
+    3PnzgdB1fpsmYCMEQ/6koKMApYN12cRy0l47LztaCL95ErUzlzfLCNmd+Yw6oU45
+    /V5Mq4MgPCeHD7g159F8VNHFWfJxAazZ4ZLQaRdGKqHgcYQBsbrHfqvGMQiGywz/
+    XRMwB1dRhdQaOV5ABxzzZ4nx9+MC/wbiJ2mW6oYFs8XSFZ3RRkCg5ljMJTgRrhjo
+    i7Ejq5OWQbROPPTfbPNPZwQiKYpC6fu4XqsYIpyR8IfQk1s+SP8urtss67eNtmPZ
+    E4hVKgt/q6zE3lfcspDEzUJ4k+80Sy67q5Dr1Z1joEy+U7prPuXVAs1JcGNUfTN9
+    JuYI3J0CgYEA9+oBRxt/43bPuPXTD4Lk4i8V6XDFRqg8Fqj3mrjE2KwHln5/2AbN
+    RcVb+FY0KZ1duIwXkLYJg8F1yE3LjrEk9dWtVvw1ZxicCF7rQdb1RkSaLOu2iuxt
+    INhyPs2dBSK6zX/0DPxqCZxKa/77gNRF5hMmPf5ikZrAKbJMgU/Y3icCgYEA8k8Y
+    ctTTDxAw4/R5kgaFJL463iTbdf4OlLaoQEW+yQ9XXg5BpcVG07vEWJmyqN7AKpMS
+    SV8NpvU4KLGSY50x0bEms88qRKcsAr/kFq4Odp5DOo5B+lBAKvmyKpugA7dk9T/c
+    DDWvFNYZCu3EJxBeTbVjDrzIpPf98Nmq+1JlWQMCgYEAxo5TsajTt9Frsv6nqS+z
+    s3f0u7/HML0DSz7O+MttVQALH7x3FgT0mSHldDNOmdnguzLwmMVDP5RNijzMgJ9e
+    M8qMhzN+bfDm30lucJACZ+H//WRYElIjYQAaGDTDwt468OW/CDuNjd7wOCjDND5P
+    MWM66MH6HhXsPDkCTzstPVcCgYEAlyf2VXQkccok5Z9V011T45bz/C475YBmMik8
+    DlQz7xMt6lO0aigFxgHlO2wuAqBqemSizLiKOLPSo7gaXR/ruybqwNKkSI2Mq+5u
+    6CMOjLqvr7Ccwf0b+nMnzOKmUIswZLnAmLFIlhP1LVcjvUa9vXZA5CmqdRbrCDuR
+    KRS+emcCgYEA7+xUc5iIWK/WoqBZqAhywECvNDPtD/ezzljMikSZQD5ivcl/7QBL
+    ntKBuS0NoPOCLz4JG9PPdBayUKZfiblMW9LbW2zmuPMdIaVmW3nHY7QLkbbhR89m
+    Bg3QZCi/U7nxLW5Qf7oRUbpWhqvqomMR3VqroSTNags7ZOdjk30ywRE=
+    -----END RSA PRIVATE KEY-----
+
+  jenkins_master_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDqp84YwV3LQBK61CmI6tjXcoRMcl4y3zlM7JAGFUbYsavE++p9r9T01APSQhHLQaYMEE6JL1FN+yBGGldfOkRJg/sZW3f9k4shRYQARf3HMVgioqb+rL94MOQ7EiN8qP5VoYj+n7CSSd9Z5rsQQotztFA7tUozgmfZ2wBU/Qa7ls4YMH+cjVaJ9HwxX4sjdAMk+j9gpGWrAQRlIxnQwwa6HcNTNB32OerH1MnW1Wv7uPP3NKRAVHhEwSF+eAUOd5YFlycfJXlBg6d0yVbL264MySgawvzYE/Jy4bh5auve1ODKIhk22Y3oA+JPTc8bVc1hLcIvr2s9DEB+iDt4KSl1 azul@toaster
+
+
+  jenkins_master_authorized_keys: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDqp84YwV3LQBK61CmI6tjXcoRMcl4y3zlM7JAGFUbYsavE++p9r9T01APSQhHLQaYMEE6JL1FN+yBGGldfOkRJg/sZW3f9k4shRYQARf3HMVgioqb+rL94MOQ7EiN8qP5VoYj+n7CSSd9Z5rsQQotztFA7tUozgmfZ2wBU/Qa7ls4YMH+cjVaJ9HwxX4sjdAMk+j9gpGWrAQRlIxnQwwa6HcNTNB32OerH1MnW1Wv7uPP3NKRAVHhEwSF+eAUOd5YFlycfJXlBg6d0yVbL264MySgawvzYE/Jy4bh5auve1ODKIhk22Y3oA+JPTc8bVc1hLcIvr2s9DEB+iDt4KSl1 azul@toaster
+
+  #
+  # Jenkins stores the passwords encrypted based on:
+  # http://stackoverflow.com/questions/4358146/what-password-encryption-hudson-is-using
+  #
+  # we can use the following piece of python code to generate the passwordHash
+  #
+  # import hashlib
+  # salt = 'myrandomsalt'
+  # password = 'myverylongpassword'
+
+  # inner_bit = "%s{%s}" % ( password, salt )
+  # passwordHash = "%s:%s" % ( salt, hashlib.sha256(inner_bit.encode('utf8')).hexdigest())
+  # print passwordHash
+  #
+  #
+  # use these to configure username/password
+  user: &jenkins_user 'admin'
+  fullName: &jenkins_full_name 'jenkins'
+  password: &jenkins_password '!password123'
+  passwordHash: &jenkins_passwordHash 'salt321:48fdc72465fbd7eb8f583f0ca012e5a8686fc5a767f4dcf6161fcc7f5fa0f33f'
+  apiToken: &jenkins_apiToken '00la8394018899bafe98939990008394018899bafe98939990008394018899bafe98939990008394018899bafe98939990008394018899bafe98939990008394018899bafe98939990008394018899bafe98939990008394018899bafe98939990008394018899bafe9893999000'
+  emailAddress: &jenkins_email_address 'jenkins@nospam.org'
+
+
+  # This block configures Global Security in Jenkins
+  # Here we map which particular priviledges are available to a particular user
+  #
+  useSecurity: 'true'
+  disableRememberMe: 'false'
+  authorizationStrategy:
+    type: 'hudson.security.GlobalMatrixAuthorizationStrategy'
+    permissions:
+
+      # admin user (has access to everything)
+      - com.cloudbees.plugins.credentials.CredentialsProvider.Create:admin
+      - com.cloudbees.plugins.credentials.CredentialsProvider.Delete:admin
+      - com.cloudbees.plugins.credentials.CredentialsProvider.ManageDomains:admin
+      - com.cloudbees.plugins.credentials.CredentialsProvider.Update:admin
+      - com.cloudbees.plugins.credentials.CredentialsProvider.View:admin
+      - hudson.model.Computer.Build:admin
+      - hudson.model.Computer.Configure:admin
+      - hudson.model.Computer.Connect:admin
+      - hudson.model.Computer.Create:admin
+      - hudson.model.Computer.Delete:admin
+      - hudson.model.Computer.Disconnect:admin
+      - hudson.model.Hudson.Administer:admin
+      - hudson.model.Hudson.ConfigureUpdateCenter:admin
+      - hudson.model.Hudson.Read:admin
+      - hudson.model.Hudson.RunScripts:admin
+      - hudson.model.Hudson.UploadPlugins:admin
+      - hudson.model.Item.Build:admin
+      - hudson.model.Item.Cancel:admin
+      - hudson.model.Item.Configure:admin
+      - hudson.model.Item.Create:admin
+      - hudson.model.Item.Delete:admin
+      - hudson.model.Item.Discover:admin
+      - hudson.model.Item.Move:admin
+      - hudson.model.Item.Read:admin
+      - hudson.model.Item.Workspace:admin
+      - hudson.model.Run.Delete:admin
+      - hudson.model.Run.Update:admin
+      - hudson.model.View.Configure:admin
+      - hudson.model.View.Create:admin
+      - hudson.model.View.Delete:admin
+      - hudson.model.View.Read:admin
+      - hudson.scm.SCM.Tag:admin
+
+      # developer (limited access)
+      - hudson.model.Item.Build:developer
+      - hudson.model.Item.Cancel:developer
+      - hudson.model.Item.Configure:developer
+      - hudson.model.Item.Create:developer
+      - hudson.model.Item.Delete:developer
+      - hudson.model.Item.Discover:developer
+      - hudson.model.Item.Move:developer
+      - hudson.model.Item.Read:developer
+      - hudson.model.Item.Workspace:developer
+      - hudson.model.Hudson.Read:developer
+
+  securityRealm:
+    type: 'hudson.security.HudsonPrivateSecurityRealm'
+    disableSignup: 'true'
+    enableCaptcha: 'false'
+
+  # add jenkins users using local jenkins database
+  #
+  # Jenkins stores the passwords encrypted based on:
+  # http://stackoverflow.com/questions/4358146/what-password-encryption-hudson-is-using
+  #
+  # we can use the following piece of python code to generate the passwordHash
+  #
+  # import hashlib
+  # salt = 'myrandomsalt'
+  # password = 'myverylongpassword'
+
+  # inner_bit = "%s{%s}" % ( password, salt )
+  # passwordHash = "%s:%s" % ( salt, hashlib.sha256(inner_bit.encode('utf8')).hexdigest())
+  # print passwordHash
+  #
+  users:
+    - { username: *jenkins_user,
+        fullName: *jenkins_full_name,
+        apiToken: *jenkins_apiToken,
+        password: *jenkins_password,
+        passwordHash: *jenkins_passwordHash,
+        emailAddress: *jenkins_email_address }
+
+    - { username: 'developer',
+        fullName: 'developer',
+        apiToken: '98348238408023840820384028304820384',
+        password: 'password',
+        passwordHash: 'salt:ced22f25384e53c51e100acead5cfafd761f18150ef141be6896700d5a0c8ae3',
+        emailAddress: *jenkins_email_address }
+
+  # config block for jenkins global credentials
+  credentials:
+    # jenkins uses a set of files to encrypt all the secrets
+    # we deploy those using a tar xvjf.
+    # but we keep the content of that tar xvzf in this yaml dict
+    #
+    # this base64 block can be generated from a docker instance using:
+    # tar cvjf /tmp/secrets.bz2 secret.key secrets/
+    # cat /tmp/secrets.bz2 | uuencode
+    secrets_tar_bz: |
+      QlpoOTFBWSZTWeycSCgACe9///////7t////f///+//////////9//7f/7///+f/vvd94As/He7t
+      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
+      XK4aN0JCEJZszJXsui7Ve8XckU4UJDsnEgoA
+
+  # NOTE: these credentials below are encrypted through the jenkins block listed
+  # above.
+  # the easiest way to find out what these values should be is to generate a
+  # new credentialsid on a test docker instance and add the entries in the
+  # credentials.xml file to this block below.
+    StringCredentials:
+      - { id: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1',
+          scope: 'GLOBAL',
+          description: '',
+          secret: 'NOT VALID ENCRYPED PASSWORD EXAMPLE' }
+
+    BasicSSHUserPrivateKey:
+      - { id: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2',
+          scope: 'GLOBAL',
+          description: 'GCE slaves key',
+          username: 'jenkins',
+          passphrase: 'NOT VALID ENCRYPTED PASSWORD EXAMPLE' }
+
+    UsernamePassword:
+      - { id: 'mesos-master-credentials',
+          scope: 'SYSTEM',
+          description: 'mesos username and password',
+          username: '',
+          password: '' }
+
+
+       # These are the login details for the user with stash access
+       # We're are not refering to them as the exact username
+       # so that we can give an abstracted reference to the build jobs
+       # that could either use this AD user or any new AD user we may create in
+       # the future.
+      - { id: 'jenkins@bitbucket.acme.org',
+          scope: 'GLOBAL',
+          description: 'GIT access to bitbucket.acme.org',
+          username: 'FILL ME IN WITH THE CORRECT USERNAME',
+          password: 'NOT VALID ENCRYPTED PASSWORD EXAMPLE' }
+
+      # These are the login details for Cygwin SSH Jenkins Slaves
+      - { id: 'HOST+jenkins', scope: 'SYSTEM', description: 'HOSTNAME+jenkins', username: 'HOSTNAME+jenkins', password: 'XXXXXXXXXXXXXX' }
+
+    SauceLabs:
+      - { id: 'MySauceLabsId',
+          scope: 'GLOBAL',
+          description: 'SauceLabs',
+          username: 'sauce_username',
+          apiKey: 'sauce_apikey' }
+
+  # Proxy Settings for Jenkins
+  Proxy:
+    name: ''
+    port: ''
+    noProxyHost: |
+      127.0.0.1
+    userName: 'username'
+    secretPassword: 'ENCRYPTED_PASSWORD_STRING'
+    testUrl: 'http://www.google.com'
+
+  # config block for slave node monitoring
+  # Jenkins master will disable jenkins slaves based on different checks
+  # checks can be toggled on and off below
+  monitors:
+    ArchitectureMonitor:
+      ignored: 'false'
+    ClockMonitor:
+      ignored: 'true'
+    DiskSpaceMonitor:
+      ignored: 'false'
+      freeSpaceThreshold: '1GB'
+    SwapSpaceMonitor:
+      ignored: 'true'
+    TemporarySpaceMonitor:
+      ignored: 'true'
+      freeSpaceThreshold: '1GB'
+    ResponseTimeMonitor:
+      ignored: 'true'
+
+
+ # the slave_setup block configures the slave_setup jenkins plugin
+  slave_setup:
+    profiles:
+      profile_1:
+        # the prelaunch script is executed before the slave instance is built
+        # it can be used to provision a new cloud instance
+        preLaunchScript: ''
+        # the prepare script is executed before we copy files to the slave
+        # and executed before we 'connect' the slave
+        # note that the 'initscripts' of the slave template are executed
+        # prior to the prepareScript step.
+        prepareScript: ''
+        filesDir: '/etc/slave_config'
+        # the commandline is executed after the files are copied to the slave
+        # but before the slave is 'connected'.
+        commandLine: 'bash /tmp/CommandLineScript.sh'
+        # commandLineScript contains the script that will be generated
+        # and deployed to the /etc/slave_config/bootscript.sh on the master box
+        commandLineScript: |
+          #!/bin/bash
+          set -x
+
+        deployNow: 'true'
+        prepareScriptExecuted: 'true'
+
+    apply_slave_config_to_labels:
+      - { label: 'aws-ubuntu-trusty-T2Micro', config: 'profile_1' }
+      - { label: 'aws-ubuntu-trusty-T2Small', config: 'profile_1' }
+      - { label: 'aws-ubuntu-trusty-T2Medium', config: 'profile_1' }
+      - { label: 'aws-centos-7-T2Micro', config: 'profile_1' }
+      - { label: 'aws-centos-7-T2Small', config: 'profile_1' }
+      - { label: 'aws-centos-7-T2Medium', config: 'profile_1' }
+      - { label: 'aws-centos-7-SELinux-T2Micro', config: 'profile_1' }
+      - { label: 'aws-centos-7-SELinux-T2Small', config: 'profile_1' }
+      - { label: 'aws-centos-7-SELinux-T2Medium', config: 'profile_1' }
+      - { label: 'rackspace-jenkins-slave-centos7-general1-1-dfw', config: 'profile_1' }
+      - { label: 'rackspace-jenkins-slave-centos7-standard-4-dfw', config: 'profile_1' }
+      - { label: 'rackspace-jenkins-slave-centos7-selinux-general1-1-dfw', config: 'profile_1' }
+      - { label: 'rackspace-jenkins-slave-centos7-selinux-standard-4-dfw', config: 'profile_1' }
+      - { label: 'rackspace-jenkins-slave-ubuntu14-general1-1-dfw', config: 'profile_1' }
+      - { label: 'rackspace-jenkins-slave-ubuntu14-general1-1-iad', config: 'profile_1' }
+      - { label: 'rackspace-jenkins-slave-ubuntu14-standard-4-iad', config: 'profile_1' }
+      - { label: 'rackspace-jenkins-slave-ubuntu14-standard-4-dfw', config: 'profile_1' }
+      - { label: 'aws-ubuntu-trusty-T2Small_16_executors', config: 'profile_1' }
+      - { label: 'aws-centos-7-T2Micro_8_executors', config: 'profile_1' }
+      - { label: 'aws-ubuntu-trusty-T2Micro_8_executors', config: 'profile_1' }
+      - { label: 'aws-centos-7-SELinux-T2Medium_32_executors', config: 'profile_1' }
+      - { label: 'aws-centos-7-SELinux-T2Micro_8_executors', config: 'profile_1' }
+      - { label: 'aws-ubuntu-trusty-T2Medium_32_executors', config: 'profile_1' }
+      - { label: 'aws-centos-7-T2Small_16_executors', config: 'profile_1' }
+      - { label: 'aws-centos-7-T2Medium_32_executors', config: 'profile_1' }
+      - { label: 'aws-centos-7-SELinux-T2Small_16_executors', config: 'profile_1' }
+      - { label: 'gce-centos7', config: 'profile_1' }
+      - { label: 'gce-ubuntu14', config: 'profile_1' }
+
+  # list of slaves used by this Jenkins Master
+  # slaves set to 'on_demand' will launch a slave service through SSH as soon
+  # there is a queued job for that slave type.
+  static_slaves:
+    - { name:  'gce_centos7_slave1', ip: "1.1.1.1", description: "GCE Centos Slave", label: "gce-centos7", credentials_id: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2",  workspace: "/tmo", on_demand: { inDemandDelay: "1", idleDelay: "1" } }
+    - { name:  'gce_ubuntu14_slave1', ip: "1.1.1.2", description: "GCE Ubuntu Slave", label: "gce-ubuntu14", credentials_id: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2",  workspace: "/tmp", on_demand: { inDemandDelay: "1", idleDelay: "1" } }
+    - { name:  'HOSTNAME', ip: "HOSTNAME", description: "HOSTNAME", label: "POOL", credentials_id: "HOSTNAME+jenkins", workspace: 'd:\\ci', on_demand: { inDemandDelay: "1", idleDelay: "1" } }
+
+  # Cloud configuration block for jenkins slaves
+  clouds:
+    # list of AMIs used in every region.
+    # Update this list in order to update the AMIs used by jenkins.
+    # Note that Jenkins is configured to always use "image..._latest".
+    # The mapping for these images in the jenkins configuration is within
+    # this YAML block. Look inside the EC/JClouds plugin blocks further
+    # down below.
+    #
+    # You should use the AWS web console to copy the original images to
+    # the different regions.
+    # Note that copying an image on Rackspace is very process consuming, it
+    # is easier to re-run the ci-slave-images code using a different
+    # rackspace region to produce a new image.
+    #
+    # When you have the list of all the new images, update the dictionary
+    # below and re-deploy Jenkins for those changes to take effect.
+    # Keep in mind, that if there are Slaves online they won't be replaced
+    # with the new Jenkins Slaves automatically, the change happens when
+    # new slaves are provisioned and the life of old slaves expire.
+    #
+    images:
+      aws:
+        ap_northeast_1:
+          centos_7: &image_aws_ap_northeast_1_centos_7_latest 'ami-00000000'
+          ubuntu_14: &image_aws_ap_northeast_1_ubuntu_14_latest 'ami-00000000'
+
+        ap_southeast_1:
+          centos_7: &image_aws_ap_southeast_1_centos_7_latest 'ami-00000000'
+          ubuntu_14: &image_aws_ap_southeast_1_ubuntu_14_latest 'ami-00000000'
+
+        eu_west_1:
+          centos_7: &image_aws_eu_west_1_centos_7_latest 'ami-00000000'
+          ubuntu_14: &image_aws_eu_west_1_ubuntu_14_latest 'ami-00000000'
+
+        ap_southeast_2:
+          centos_7: &image_aws_ap_southeast_2_centos_7_latest 'ami-00000000'
+          ubuntu_14: &image_aws_ap_southeast_2_ubuntu_14_latest 'ami-00000000'
+        eu_central_1:
+          centos_7: &image_aws_eu_central_1_centos_7_latest 'ami-00000000'
+          ubuntu_14: &image_aws_eu_central_1_ubuntu_14_latest 'ami-00000000'
+        sa_east_1:
+          centos_7: &image_aws_sa_east_1_centos_7_latest 'ami-00000000'
+          ubuntu_14: &image_aws_sa_east_1_ubuntu_14_latest 'ami-00000000'
+        us_east_1:
+          centos_7: &image_aws_us_east_1_centos_7_latest 'ami-00000000'
+          ubuntu_14: &image_aws_us_east_1_ubuntu_14_latest 'ami-00000000'
+        us_west_1:
+          centos_7: &image_aws_us_west_1_centos_7_latest 'ami-00000000'
+          ubuntu_14: &image_aws_us_west_1_ubuntu_14_latest 'ami-00000000'
+        us_west_2:
+          centos_7: &image_aws_us_west_2_centos_7_latest 'ami-00000000'
+          ubuntu_14: &image_aws_us_west_2_ubuntu_14_latest 'ami-00000000'
+
+      rackspace:
+        dfw:
+          centos_7: &image_rackspace_dfw_centos_7_latest 'DFW/00000000-0000-0000-0000-000000000000'
+          ubuntu_14: &image_rackspace_dfw_ubuntu_14_latest 'DFW/00000000-0000-0000-0000-000000000000'
+
+        iad:
+          ubuntu_14: &image_rackspace_iad_ubuntu_14_latest 'IAD/00000000-0000-0000-0000-000000000000'
+          centos_7: &image_rackspace_iad_centos_7_latest 'IAD/00000000-0000-0000-0000-000000000000'
+
+
+    # configuration for the jenkins ec2-plugin, that provisions slaves
+    # on demand on AWS
+    #
+    # first we define a template for our Slave instances.
+    # We will override specific parameters within each AWS Region block.
+    #
+    # jvmopts      - values for the slave JVM
+    #   -Xmx512m   - max size for the JVM Heap
+    #   -Dhudson.* - defaults documented at https://wiki.jenkins-ci.org/display/JENKINS/Features+controlled+by+system+properties
+    #
+    # Values chosen at somewhat at random to ensure a more responsive slave -> master communication
+    template_common: &template_common
+      securityGroups: 'ssh,http'
+      remoteFS: '/tmp'
+      mode: 'NORMAL'
+      initscript: []
+      tmpDir: ''
+      userData: ''
+      numExecutors: '1'
+      jvmopts: '-Xmx512m -Dhudson.slaves.ChannelPinger.pingInterval=2 -Dhudson.remoting.Launcher.pingTimeoutSec=5 -Dhudson.remoting.Launcher.pingIntervalSec=2'
+      subnetId: ''
+      # a negative idle timeout will terminate the slave 5 minutes before
+      # the hourly billing period has ended.
+      idleTerminationMinutes: '-5'
+      iamInstanceProfile: ''
+      useEphemeralDevices: 'true'
+      customDeviceMapping: ''
+      stopOnTerminate: 'false'
+      usePrivateDnsName: 'false'
+      associatePublicIp: 'false'
+      # EC2 plugin limits the maximum number of instances it will provision
+      # based on the number of instances running for a particular AMI.
+      # it seems this instanceCap is global and not per jenkins instance.
+      # so this is the maximum number overall for ALL jenkins instances.
+      instanceCap: '20'
+      useDedicatedTenancy: 'false'
+      rootCommandPrefix: 'sudo'
+      sshPort: '22'
+      launchTimeout: '600'
+      connectBySSHProcess: 'true'
+      zone: ''
+      tags:
+        - { name: 'name', value: 'jenkins-slave' }
+        - { name: 'selinux', value: 'enabled' }
+
+    ec2_plugin: [
+      { name: 'ec2-us-west-1',
+        region: 'us-west-1',
+        useInstanceProfileForCredentials: 'false',
+        accessId: *jenkins_master_accessID,
+        secretKey: *jenkins_master_secretKey,
+        privatekeys: [ *jenkins_slave_private_key ],
+        # EC2 plugin limits the maximum number of instances it will provision
+        # based on the number of instances running for a particular AMI.
+        # it seems this instanceCap is global and not per jenkins instance.
+        # so this is the maximum number overall for ALL jenkins instances.
+        instanceCap: '20',
+
+        # the templates block contains the details about our slave jenkins
+        # clouds images. Jobs are allocated a slave based on a label,
+        # we define how we want to build those slaves here.
+        # and give them a label so that jobs can consume it.
+        # Note: there is a plugin in jenkins, which copies files to the
+        # slave onto /tmp. The plugin sources the files in /etc/slave_config
+        # in the jenkins master and copies them across.
+        # However that copy happens after this initscript has been run.
+        # TODO: There are options in that plugin to execute pre-post copy
+        # scripts, and they may be more usefull than this initscript below.
+        #
+        templates: [
+          {
+          <<: *template_common,
+          ami: *image_aws_us_west_1_ubuntu_14_latest,
+          description: 'aws-ubuntu-trusty-T2Small',
+          labels: 'aws-ubuntu-trusty-T2Small',
+          remoteAdmin: 'ubuntu',
+          type: 'T2Small',
+          },
+          {
+          <<: *template_common,
+          ami: *image_aws_us_west_1_ubuntu_14_latest,
+          description: 'aws-ubuntu-trusty-T2Small with 16 executors',
+          labels: 'aws-ubuntu-trusty-T2Small_16_executors',
+          remoteAdmin: 'ubuntu',
+          type: 'T2Small',
+          numExecutors: '16'
+          },
+
+        ] #close templates
+      }, #close cloud,
+
+      { name: 'ec2-us-west-2',
+        region: 'us-west-2',
+        useInstanceProfileForCredentials: 'false',
+        accessId: *jenkins_master_accessID,
+        secretKey: *jenkins_master_secretKey,
+        privatekeys: [ *jenkins_slave_private_key ],
+        # EC2 plugin limits the maximum number of instances it will provision
+        # based on the number of instances running for a particular AMI.
+        # it seems this instanceCap is global and not per jenkins instance.
+        # so this is the maximum number overall for ALL jenkins instances.
+        instanceCap: '20',
+
+        # the templates block contains the details about our slave jenkins
+        # clouds images. Jobs are allocated a slave based on a label,
+        # we define how we want to build those slaves here.
+        # and give them a label so that jobs can consume it.
+        # Note: there is a plugin in jenkins, which copies files to the
+        # slave onto /tmp. The plugin sources the files in /etc/slave_config
+        # in the jenkins master and copies them across.
+        # However that copy happens after this initscript has been run.
+        # TODO: There are options in that plugin to execute pre-post copy
+        # scripts, and they may be more usefull than this initscript below.
+        #
+        templates: [
+          {
+          <<: *template_common,
+          ami: *image_aws_us_west_2_centos_7_latest,
+          description: 'aws-centos-7-T2Micro',
+          labels: 'aws-centos-7-T2Micro',
+          remoteAdmin: 'centos',
+          type: 'T2Micro',
+          },
+          {
+          <<: *template_common,
+          ami: *image_aws_us_west_2_centos_7_latest,
+          description: 'aws-centos-7-T2Micro with 8 executors',
+          labels: 'aws-centos-7-T2Micro_8_executors',
+          remoteAdmin: 'centos',
+          type: 'T2Micro',
+          numExecutors: '8'
+          },
+
+
+        ] #close templates
+      }, #close cloud,
+
+      { name: 'ec2-us-east-1',
+        region: 'us-east-1',
+        useInstanceProfileForCredentials: 'false',
+        accessId: *jenkins_master_accessID,
+        secretKey: *jenkins_master_secretKey,
+        privatekeys: [ *jenkins_slave_private_key ],
+        # EC2 plugin limits the maximum number of instances it will provision
+        # based on the number of instances running for a particular AMI.
+        # it seems this instanceCap is global and not per jenkins instance.
+        # so this is the maximum number overall for ALL jenkins instances.
+        instanceCap: '20',
+
+        # the templates block contains the details about our slave jenkins
+        # clouds images. Jobs are allocated a slave based on a label,
+        # we define how we want to build those slaves here.
+        # and give them a label so that jobs can consume it.
+        # Note: there is a plugin in jenkins, which copies files to the
+        # slave onto /tmp. The plugin sources the files in /etc/slave_config
+        # in the jenkins master and copies them across.
+        # However that copy happens after this initscript has been run.
+        # TODO: There are options in that plugin to execute pre-post copy
+        # scripts, and they may be more usefull than this initscript below.
+        #
+        templates: [
+          {
+          <<: *template_common,
+          ami: *image_aws_us_east_1_ubuntu_14_latest,
+          description: 'aws-ubuntu-trusty-T2Micro',
+          labels: 'aws-ubuntu-trusty-T2Micro',
+          remoteAdmin: 'ubuntu',
+          type: 'T2Micro',
+          },
+          {
+          <<: *template_common,
+          ami: *image_aws_us_east_1_ubuntu_14_latest,
+          description: 'aws-ubuntu-trusty-T2Micro with 8 executors',
+          labels: 'aws-ubuntu-trusty-T2Micro_8_executors',
+          remoteAdmin: 'ubuntu',
+          type: 'T2Micro',
+          numExecutors: '8'
+          },
+
+        ] #close templates
+      }, #close cloud,
+
+
+      { name: 'ec2-eu-west-1',
+        region: 'eu-west-1',
+        useInstanceProfileForCredentials: 'false',
+        accessId: *jenkins_master_accessID,
+        secretKey: *jenkins_master_secretKey,
+        privatekeys: [ *jenkins_slave_private_key ],
+        # EC2 plugin limits the maximum number of instances it will provision
+        # based on the number of instances running for a particular AMI.
+        # it seems this instanceCap is global and not per jenkins instance.
+        # so this is the maximum number overall for ALL jenkins instances.
+        instanceCap: '20',
+
+        # the templates block contains the details about our slave jenkins
+        # clouds images. Jobs are allocated a slave based on a label,
+        # we define how we want to build those slaves here.
+        # and give them a label so that jobs can consume it.
+        # Note: there is a plugin in jenkins, which copies files to the
+        # slave onto /tmp. The plugin sources the files in /etc/slave_config
+        # in the jenkins master and copies them across.
+        # However that copy happens after this initscript has been run.
+        # TODO: There are options in that plugin to execute pre-post copy
+        # scripts, and they may be more usefull than this initscript below.
+        #
+        templates: [
+
+          {
+          <<: *template_common,
+          ami: *image_aws_eu_west_1_centos_7_latest,
+          description: 'aws-centos-7-SELinux-T2Medium',
+          labels: 'aws-centos-7-SELinux-T2Medium',
+          remoteAdmin: 'centos',
+          type: 'T2Medium',
+          },
+          {
+          <<: *template_common,
+          ami: *image_aws_eu_west_1_centos_7_latest,
+          description: 'aws-centos-7-SELinux-T2Medium with 32 executors',
+          labels: 'aws-centos-7-SELinux-T2Medium_32_executors',
+          remoteAdmin: 'centos',
+          type: 'T2Medium',
+          numExecutors: '32'
+          },
+        ] #close templates
+      }, #close cloud,
+
+      # jenkins EC2 plugin needs to be updated, due to change in endpoints
+      { name: 'ec2-eu-central-1',
+        region: 'eu-central-1',
+        useInstanceProfileForCredentials: 'false',
+        accessId: *jenkins_master_accessID,
+        secretKey: *jenkins_master_secretKey,
+        privatekeys: [ *jenkins_slave_private_key ],
+        # EC2 plugin limits the maximum number of instances it will provision
+        # based on the number of instances running for a particular AMI.
+        # it seems this instanceCap is global and not per jenkins instance.
+        # so this is the maximum number overall for ALL jenkins instances.
+        instanceCap: '20',
+
+        # the templates block contains the details about our slave jenkins
+        # clouds images. Jobs are allocated a slave based on a label,
+        # we define how we want to build those slaves here.
+        # and give them a label so that jobs can consume it.
+        # Note: there is a plugin in jenkins, which copies files to the
+        # slave onto /tmp. The plugin sources the files in /etc/slave_config
+        # in the jenkins master and copies them across.
+        # However that copy happens after this initscript has been run.
+        # TODO: There are options in that plugin to execute pre-post copy
+        # scripts, and they may be more usefull than this initscript below.
+        #
+        templates: [
+          {
+          <<: *template_common,
+          ami: *image_aws_eu_central_1_centos_7_latest,
+          description: 'aws-centos-7-SELinux-T2Micro',
+          labels: 'aws-centos-7-SELinux-T2Micro',
+          remoteAdmin: 'centos',
+          type: 'T2Micro',
+          },
+          {
+          <<: *template_common,
+          ami: *image_aws_eu_central_1_centos_7_latest,
+          description: 'aws-centos-7-SELinux-T2Micro with 8 executors',
+          labels: 'aws-centos-7-SELinux-T2Micro_8_executors',
+          remoteAdmin: 'centos',
+          type: 'T2Micro',
+          numExecutors: '8'
+          },
+
+        ] #close templates
+      }, #close cloud,
+
+      { name: 'ec2-ap-southeast-1',
+        region: 'ap-southeast-1',
+        useInstanceProfileForCredentials: 'false',
+        accessId: *jenkins_master_accessID,
+        secretKey: *jenkins_master_secretKey,
+        privatekeys: [ *jenkins_slave_private_key ],
+        # EC2 plugin limits the maximum number of instances it will provision
+        # based on the number of instances running for a particular AMI.
+        # it seems this instanceCap is global and not per jenkins instance.
+        # so this is the maximum number overall for ALL jenkins instances.
+        instanceCap: '20',
+
+        # the templates block contains the details about our slave jenkins
+        # clouds images. Jobs are allocated a slave based on a label,
+        # we define how we want to build those slaves here.
+        # and give them a label so that jobs can consume it.
+        # Note: there is a plugin in jenkins, which copies files to the
+        # slave onto /tmp. The plugin sources the files in /etc/slave_config
+        # in the jenkins master and copies them across.
+        # However that copy happens after this initscript has been run.
+        # TODO: There are options in that plugin to execute pre-post copy
+        # scripts, and they may be more usefull than this initscript below.
+        #
+
+        templates: [
+          {
+          <<: *template_common,
+          ami: *image_aws_ap_southeast_1_ubuntu_14_latest,
+          description: 'aws-ubuntu-trusty-T2Medium',
+          labels: 'aws-ubuntu-trusty-T2Medium',
+          remoteAdmin: 'ubuntu',
+          type: 'T2Medium',
+          },
+          {
+          <<: *template_common,
+          ami: *image_aws_ap_southeast_1_ubuntu_14_latest,
+          description: 'aws-ubuntu-trusty-T2Medium with 32 executors',
+          labels: 'aws-ubuntu-trusty-T2Medium_32_executors',
+          remoteAdmin: 'ubuntu',
+          type: 'T2Medium',
+          numExecutors: '32'
+          },
+
+
+        ] #close templates
+      }, #close cloud,
+
+      { name: 'ec2-ap-southeast-2',
+        region: 'ap-southeast-2',
+        useInstanceProfileForCredentials: 'false',
+        accessId: *jenkins_master_accessID,
+        secretKey: *jenkins_master_secretKey,
+        privatekeys: [ *jenkins_slave_private_key ],
+        # EC2 plugin limits the maximum number of instances it will provision
+        # based on the number of instances running for a particular AMI.
+        # it seems this instanceCap is global and not per jenkins instance.
+        # so this is the maximum number overall for ALL jenkins instances.
+        instanceCap: '20',
+
+        # the templates block contains the details about our slave jenkins
+        # clouds images. Jobs are allocated a slave based on a label,
+        # we define how we want to build those slaves here.
+        # and give them a label so that jobs can consume it.
+        # Note: there is a plugin in jenkins, which copies files to the
+        # slave onto /tmp. The plugin sources the files in /etc/slave_config
+        # in the jenkins master and copies them across.
+        # However that copy happens after this initscript has been run.
+        # TODO: There are options in that plugin to execute pre-post copy
+        # scripts, and they may be more usefull than this initscript below.
+        #
+        templates: [
+
+          {
+          <<: *template_common,
+          ami: *image_aws_ap_southeast_2_centos_7_latest,
+          description: 'aws-centos-7-T2Small',
+          labels: 'aws-centos-7-T2Small',
+          remoteAdmin: 'centos',
+          type: 'T2Small',
+          },
+          {
+          <<: *template_common,
+          ami: *image_aws_ap_southeast_2_centos_7_latest,
+          description: 'aws-centos-7-T2Small with 16 executors',
+          labels: 'aws-centos-7-T2Small_16_executors',
+          remoteAdmin: 'centos',
+          type: 'T2Small',
+          numExecutors: '16'
+          },
+        ] #close templates
+      }, #close cloud,
+
+      { name: 'ec2-ap-northeast-1',
+        region: 'ap-northeast-1',
+        useInstanceProfileForCredentials: 'false',
+        accessId: *jenkins_master_accessID,
+        secretKey: *jenkins_master_secretKey,
+        privatekeys: [ *jenkins_slave_private_key ],
+        # EC2 plugin limits the maximum number of instances it will provision
+        # based on the number of instances running for a particular AMI.
+        # it seems this instanceCap is global and not per jenkins instance.
+        # so this is the maximum number overall for ALL jenkins instances.
+        instanceCap: '20',
+
+        # the templates block contains the details about our slave jenkins
+        # clouds images. Jobs are allocated a slave based on a label,
+        # we define how we want to build those slaves here.
+        # and give them a label so that jobs can consume it.
+        # Note: there is a plugin in jenkins, which copies files to the
+        # slave onto /tmp. The plugin sources the files in /etc/slave_config
+        # in the jenkins master and copies them across.
+        # However that copy happens after this initscript has been run.
+        # TODO: There are options in that plugin to execute pre-post copy
+        # scripts, and they may be more usefull than this initscript below.
+        #
+        templates: [
+          {
+          <<: *template_common,
+          ami: *image_aws_ap_northeast_1_centos_7_latest,
+          description: 'aws-centos-7-T2Medium',
+          labels: 'aws-centos-7-T2Medium',
+          remoteAdmin: 'centos',
+          type: 'T2Medium',
+          },
+          {
+          <<: *template_common,
+          ami: *image_aws_ap_northeast_1_centos_7_latest,
+          description: 'aws-centos-7-T2Medium with 32 executors',
+          labels: 'aws-centos-7-T2Medium_32_executors',
+          remoteAdmin: 'centos',
+          type: 'T2Medium',
+          numExecutors: '32'
+          },
+        ] #close templates
+      }, #close cloud,
+
+      { name: 'ec2-sa-east-1',
+        region: 'sa-east-1',
+        useInstanceProfileForCredentials: 'false',
+        accessId: *jenkins_master_accessID,
+        secretKey: *jenkins_master_secretKey,
+        privatekeys: [ *jenkins_slave_private_key ],
+        # EC2 plugin limits the maximum number of instances it will provision
+        # based on the number of instances running for a particular AMI.
+        # it seems this instanceCap is global and not per jenkins instance.
+        # so this is the maximum number overall for ALL jenkins instances.
+        instanceCap: '20',
+
+        # the templates block contains the details about our slave jenkins
+        # clouds images. Jobs are allocated a slave based on a label,
+        # we define how we want to build those slaves here.
+        # and give them a label so that jobs can consume it.
+        # Note: there is a plugin in jenkins, which copies files to the
+        # slave onto /tmp. The plugin sources the files in /etc/slave_config
+        # in the jenkins master and copies them across.
+        # However that copy happens after this initscript has been run.
+        # TODO: There are options in that plugin to execute pre-post copy
+        # scripts, and they may be more usefull than this initscript below.
+        #
+        templates: [
+          {
+          <<: *template_common,
+          securityGroups: 'ssh,http',
+          ami: *image_aws_sa_east_1_centos_7_latest,
+          description: 'aws-centos-7-SELinux-T2Small',
+          labels: 'aws-centos-7-SELinux-T2Small',
+          remoteAdmin: 'centos',
+          type: 'T2Small',
+          },
+          {
+          <<: *template_common,
+          securityGroups: 'ssh,http',
+          ami: *image_aws_sa_east_1_centos_7_latest,
+          description: 'aws-centos-7-SELinux-T2Small with 16 executors',
+          labels: 'aws-centos-7-SELinux-T2Small_16_executors',
+          remoteAdmin: 'centos',
+          type: 'T2Small',
+          numExecutors: '16'
+          },
+        ] #close templates
+      }, #close cloud,
+
+    ] #close ec2_clouds
+
+    # configuration for the jenkins jclouds plugin, that provisions slaves
+    # on demand on Rackspace
+    jclouds_plugin: [
+      { name: 'Rackspace-US-DFW',
+        identity: 'XXXXXXXXX.XXXXXXXX',
+        credential: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+        providerName: 'rackspace-cloudservers-us',
+        privateKey: *jenkins_slave_private_key,
+        publicKey: *jenkins_slave_public_key,
+        endPointUrl: 'https://identity.api.rackspacecloud.com/v2.0/',
+        profile: 'rackspace',
+        retentionTime: '24',
+        # the maximum number of instances we will run at any single time
+        instanceCap: '20',
+        templates: [
+          # this instance is failling to build,
+          # error:
+          # the disk is too smal for this type of instance (???!)
+          { name: 'rackspace-jenkins-slave-centos7-general1-1-dfw',
+            imageId: *image_rackspace_dfw_centos_7_latest,
+            hardwareId: 'DFW/general1-1',
+            # these next fields are breaking the jclouds-plugin,
+            #cores: '1.0',
+            #ram: '512',
+            #osFamily: 'centos',
+            #osVersion: '7',
+            #imageNageRegex: '.*centos.*7',
+            labelString: 'rackspace-jenkins-slave-centos7-general1-1-dfw',
+            description: 'rackspace-jenkins-slave-centos7-general1-1-dfw',
+            locationId: 'DFW',
+            initScript: [],
+            numExecutors: '1',
+            stopOnTerminate: 'false',
+            vmUser: 'root',
+            preInstalledJava: 'true',
+            preExistingJenkinsUser: 'true',
+            jenkinsUser: 'centos',
+            fsRoot: '/tmp',
+            allowSudo: 'true',
+            installPrivateKey: 'false',
+            overrideRetentionTime: '24',
+            # Rackspace can be a bit slower to provision nodes,
+            # don't try to make requests too quickly.
+            # Let's use 20 seconds on the basis that there are only a
+            # couple of jobs executed on Rackspace in parallel for a single
+            # branch. So this shouldn't introduce too much of a delay.
+            spoolDelayMs: '20000',
+            assignFloatingIp: 'false',
+            networks: ['00000000-0000-0000-0000-000000000000'],
+            securityGroups: [],
+            keyPairName: 'jenkins-slave'
+          },
+          { name: 'rackspace-jenkins-slave-centos7-standard-4-dfw',
+            imageId: *image_rackspace_dfw_centos_7_latest,
+            hardwareId: 'DFW/5',
+            # these next fields are breaking the jclouds-plugin,
+            #cores: '1.0',
+            #ram: '512',
+            #osFamily: 'centos',
+            #osVersion: '7',
+            #imageNageRegex: '.*centos.*7',
+            labelString: 'rackspace-jenkins-slave-centos7-standard-4-dfw',
+            description: 'rackspace-jenkins-slave-centos7-standard-4-dfw',
+            locationId: 'DFW',
+            initScript: [],
+            numExecutors: '1',
+            stopOnTerminate: 'false',
+            vmUser: 'root',
+            preInstalledJava: 'true',
+            preExistingJenkinsUser: 'true',
+            jenkinsUser: 'centos',
+            fsRoot: '/tmp',
+            allowSudo: 'true',
+            installPrivateKey: 'false',
+            overrideRetentionTime: '24',
+            # Rackspace can be a bit slower to provision nodes,
+            # don't try to make requests too quickly.
+            # Let's use 20 seconds on the basis that there are only a
+            # couple of jobs executed on Rackspace in parallel for a single
+            # branch. So this shouldn't introduce too much of a delay.
+            spoolDelayMs: '20000',
+            assignFloatingIp: 'false',
+            networks: ['00000000-0000-0000-0000-000000000000'],
+            securityGroups: [],
+            keyPairName: 'jenkins-slave'
+          },
+          # this box is failling to start, the disk is too small
+          # for the vm type!!!!
+            { name: 'rackspace-jenkins-slave-centos7-selinux-general1-1-dfw',
+            imageId: *image_rackspace_dfw_centos_7_latest,
+            hardwareId: 'DFW/general1-1',
+            # these next fields are breaking the jclouds-plugin,
+            #cores: '1.0',
+            #ram: '512',
+            #osFamily: 'centos',
+            #osVersion: '7',
+            #imageNageRegex: '.*centos.*7',
+            labelString: 'rackspace-jenkins-slave-centos7-selinux-general1-1-dfw',
+            description: 'rackspace-jenkins-slave-centos7-selinux-general1-1-dfw',
+            locationId: 'DFW',
+            initScript: [],
+            numExecutors: '1',
+            stopOnTerminate: 'false',
+            vmUser: 'root',
+            preInstalledJava: 'true',
+            preExistingJenkinsUser: 'true',
+            jenkinsUser: 'centos',
+            fsRoot: '/tmp',
+            allowSudo: 'true',
+            installPrivateKey: 'false',
+            overrideRetentionTime: '24',
+            # Rackspace can be a bit slower to provision nodes,
+            # don't try to make requests too quickly.
+            # Let's use 20 seconds on the basis that there are only a
+            # couple of jobs executed on Rackspace in parallel for a single
+            # branch. So this shouldn't introduce too much of a delay.
+            spoolDelayMs: '20000',
+            assignFloatingIp: 'false',
+            networks: ['00000000-0000-0000-0000-000000000000'],
+            securityGroups: [],
+            keyPairName: 'jenkins-slave'
+          },
+          { name: 'rackspace-jenkins-slave-centos7-selinux-standard-4-dfw',
+            imageId: *image_rackspace_dfw_centos_7_latest,
+            hardwareId: 'DFW/5',
+            # these next fields are breaking the jclouds-plugin,
+            #cores: '1.0',
+            #ram: '512',
+            #osFamily: 'centos',
+            #osVersion: '7',
+            #imageNageRegex: '.*centos.*7',
+            labelString: 'rackspace-jenkins-slave-centos7-selinux-standard-4-dfw',
+            description: 'rackspace-jenkins-slave-centos7-selinux-standard-4-dfw',
+            locationId: 'DFW',
+            initScript: [],
+            numExecutors: '1',
+            stopOnTerminate: 'false',
+            vmUser: 'root',
+            preInstalledJava: 'true',
+            preExistingJenkinsUser: 'true',
+            jenkinsUser: 'centos',
+            fsRoot: '/tmp',
+            allowSudo: 'true',
+            installPrivateKey: 'false',
+            overrideRetentionTime: '24',
+            # Rackspace can be a bit slower to provision nodes,
+            # don't try to make requests too quickly.
+            # Let's use 20 seconds on the basis that there are only a
+            # couple of jobs executed on Rackspace in parallel for a single
+            # branch. So this shouldn't introduce too much of a delay.
+            spoolDelayMs: '20000',
+            assignFloatingIp: 'false',
+            networks: ['00000000-0000-0000-0000-000000000000'],
+            securityGroups: [],
+            keyPairName: 'jenkins-slave'
+          },
+          # this box is failling to start, the disk is too small
+          # for the vm type!!!!
+          { name: 'rackspace-jenkins-slave-ubuntu14-general1-1-dfw',
+            imageId: *image_rackspace_dfw_ubuntu_14_latest,
+            hardwareId: 'DFW/general1-1',
+            # these next fields are breaking the jclouds-plugin,
+            #cores: '1.0',
+            #ram: '512',
+            #osFamily: 'ubuntu',
+            #osVersion: '14.04',
+            #imageNageRegex: '.*ubuntu.*14.*',
+            labelString: 'rackspace-jenkins-slave-ubuntu14-general1-1-dfw',
+            description: 'rackspace-jenkins-slave-ubuntu14-general1-1-dfw',
+            locationId: 'dfw',
+            initScript: [],
+            numExecutors: '1',
+            stopOnTerminate: 'false',
+            vmUser: 'root',
+            preInstalledJava: 'true',
+            preExistingJenkinsUser: 'true',
+            jenkinsUser: 'ubuntu',
+            fsRoot: '/tmp',
+            allowSudo: 'true',
+            installPrivateKey: 'false',
+            overrideRetentionTime: '24',
+            # Rackspace can be a bit slower to provision nodes,
+            # don't try to make requests too quickly.
+            # Let's use 20 seconds on the basis that there are only a
+            # couple of jobs executed on Rackspace in parallel for a single
+            # branch. So this shouldn't introduce too much of a delay.
+            spoolDelayMs: '20000',
+            assignFloatingIp: 'false',
+            networks: ['00000000-0000-0000-0000-000000000000'],
+            securityGroups: [],
+            keyPairName: 'jenkins-slave'
+          },
+          { name: 'rackspace-jenkins-slave-ubuntu14-standard-4-dfw',
+            imageId: *image_rackspace_dfw_ubuntu_14_latest,
+            hardwareId: 'DFW/5',
+            # these next fields are breaking the jclouds-plugin,
+            #cores: '1.0',
+            #ram: '512',
+            #osFamily: 'ubuntu',
+            #osVersion: '14.04',
+            #imageNageRegex: '.*ubuntu.*14.*',
+            labelString: 'rackspace-jenkins-slave-ubuntu14-standard-4-dfw',
+            description: 'rackspace-jenkins-slave-ubuntu14-standard-4-dfw',
+            locationId: 'DFW',
+            initScript: [],
+            numExecutors: '1',
+            stopOnTerminate: 'false',
+            vmUser: 'root',
+            preInstalledJava: 'true',
+            preExistingJenkinsUser: 'true',
+            jenkinsUser: 'ubuntu',
+            fsRoot: '/tmp',
+            allowSudo: 'true',
+            installPrivateKey: 'false',
+            overrideRetentionTime: '24',
+            # Rackspace can be a bit slower to provision nodes,
+            # don't try to make requests too quickly.
+            # Let's use 20 seconds on the basis that there are only a
+            # couple of jobs executed on Rackspace in parallel for a single
+            # branch. So this shouldn't introduce too much of a delay.
+            spoolDelayMs: '20000',
+            assignFloatingIp: 'false',
+            networks: ['00000000-0000-0000-0000-000000000000'],
+            securityGroups: [],
+            keyPairName: 'jenkins-slave'
+          }
+        ]
+      },
+      { name: 'Rackspace-US-IAD',
+        identity: 'XXXXXXXXX.XXXXXXXX',
+        credential: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+        providerName: 'rackspace-cloudservers-us',
+        privateKey: *jenkins_slave_private_key,
+        publicKey: *jenkins_slave_public_key,
+        endPointUrl: 'https://identity.api.rackspacecloud.com/v2.0/',
+        profile: 'rackspace',
+        retentionTime: '24',
+        # the maximum number of instances we will run at any single time
+        instanceCap: '20',
+        templates: [
+          # this box is failling to start, the disk is too small
+          # for the vm type!!!!
+          { name: 'rackspace-jenkins-slave-ubuntu14-general1-1-iad',
+            imageId: *image_rackspace_iad_ubuntu_14_latest,
+            hardwareId: 'IAD/general1-1',
+            # these next fields are breaking the jclouds-plugin,
+            #cores: '1.0',
+            #ram: '512',
+            #osFamily: 'ubuntu',
+            #osVersion: '14.04',
+            #imageNageRegex: '.*ubuntu.*14.*',
+            labelString: 'rackspace-jenkins-slave-ubuntu14-general1-1-iad',
+            description: 'rackspace-jenkins-slave-ubuntu14-general1-1-iad',
+            locationId: 'IAD',
+            initScript: [],
+            numExecutors: '1',
+            stopOnTerminate: 'false',
+            vmUser: 'root',
+            preInstalledJava: 'true',
+            preExistingJenkinsUser: 'true',
+            jenkinsUser: 'ubuntu',
+            fsRoot: '/tmp',
+            allowSudo: 'true',
+            installPrivateKey: 'false',
+            overrideRetentionTime: '24',
+            # Rackspace can be a bit slower to provision nodes,
+            # don't try to make requests too quickly.
+            # Let's use 20 seconds on the basis that there are only a
+            # couple of jobs executed on Rackspace in parallel for a single
+            # branch. So this shouldn't introduce too much of a delay.
+            spoolDelayMs: '20000',
+            assignFloatingIp: 'false',
+            networks: ['00000000-0000-0000-0000-000000000000'],
+            securityGroups: [],
+            keyPairName: 'jenkins-slave'
+          },
+          { name: 'rackspace-jenkins-slave-ubuntu14-standard-4-iad',
+            imageId: *image_rackspace_iad_ubuntu_14_latest,
+            hardwareId: 'IAD/5',
+            # these next fields are breaking the jclouds-plugin,
+            #cores: '1.0',
+            #ram: '512',
+            #osFamily: 'ubuntu',
+            #osVersion: '14.04',
+            #imageNageRegex: '.*ubuntu.*14.*',
+            labelString: 'rackspace-jenkins-slave-ubuntu14-standard-4-iad',
+            description: 'rackspace-jenkins-slave-ubuntu14-standard-4-iad',
+            locationId: 'IAD',
+            initScript: [],
+            numExecutors: '1',
+            stopOnTerminate: 'false',
+            vmUser: 'root',
+            preInstalledJava: 'true',
+            preExistingJenkinsUser: 'true',
+            jenkinsUser: 'ubuntu',
+            fsRoot: '/tmp',
+            allowSudo: 'true',
+            installPrivateKey: 'false',
+            overrideRetentionTime: '24',
+            # Rackspace can be a bit slower to provision nodes,
+            # don't try to make requests too quickly.
+            # Let's use 20 seconds on the basis that there are only a
+            # couple of jobs executed on Rackspace in parallel for a single
+            # branch. So this shouldn't introduce too much of a delay.
+            spoolDelayMs: '20000',
+            assignFloatingIp: 'false',
+            networks: ['00000000-0000-0000-0000-000000000000'],
+            securityGroups: [],
+            keyPairName: 'jenkins-slave'
+          }
+        ]
+      }
+    ] #close jclouds_plugin
+    MesosCloud_plugin: [
+      { name: 'ci_mesos_box1',
+        nativeLibraryPath: '/usr/lib/libmesos.so',
+        # give the hostname:port for the mesos master
+        # such as: 'leader.mesos:5050' (using mesos-dns)
+        # or you can also give the zookeeper string for all the zk nodes
+        # and the path for /mesos, example:
+        # zk://zk01:2181,zk02:2181,zk03:2181/mesos',
+        master: 'leader.mesos:5050',
+        description: 'mesos cluster on tinc-core-vpn',
+        frameworkName: 'JenkinsFramework',
+        # jenkins will ssh to the mesos-slaves as user mesos
+        slavesUser: 'mesos',
+        # see: mesos-master-credentials in the credentials block
+        # our doesn't use any authentication
+        # credentialsId: '', 
+        # the next two settings, seem to be cause some issues on
+        # running jobs through mesos.
+        # if there are issues, set checkpoint to false
+        checkpoint: 'true',
+        onDemandRegistration: 'true',
+        # this needs to be updated on Jenkins after the initial deployment
+        # for a test instance, simply update the URL to point to your
+        # personal jenkins instance.
+        #
+        # also set the correct username:password in the jnlpArgs
+        # these are the authentication details for the jenkins master
+        jenkinsURL: *jenkins_url,
+        slaveInfos: [
+          { slaveCpus: '0.1',
+            slaveMem: '128',
+            executorCpus: '0.1',
+            maxExecutors: '1',
+            executorMem: '128',
+            remoteFSRoot: 'jenkins',
+            idleTerminationMinutes: '1',
+            jvmArgs: '-Xms16m -XX:+UseConcMarkSweepGC -Djava.net.preferIPv4Stack=true',
+            jnlpArgs: '-auth admin:!password123',
+            mode: 'NORMAL',
+            labelString: 'mesos-128MB'
+          },
+          { slaveCpus: '0.1',
+            slaveMem: '256',
+            executorCpus: '0.1',
+            maxExecutors: '1',
+            executorMem: '128',
+            remoteFSRoot: 'jenkins',
+            idleTerminationMinutes: '1',
+            jvmArgs: '-Xms16m -XX:+UseConcMarkSweepGC -Djava.net.preferIPv4Stack=true',
+            jnlpArgs: '-auth admin:!password123',
+            mode: 'NORMAL',
+            labelString: 'mesos-256MB'
+          },
+          { slaveCpus: '0.1',
+            slaveMem: '512',
+            executorCpus: '0.1',
+            maxExecutors: '1',
+            executorMem: '128',
+            remoteFSRoot: 'jenkins',
+            idleTerminationMinutes: '1',
+            jvmArgs: '-Xms16m -XX:+UseConcMarkSweepGC -Djava.net.preferIPv4Stack=true',
+            jnlpArgs: '-auth admin:!password123',
+            mode: 'NORMAL',
+            labelString: 'mesos-512MB'
+          },
+          { slaveCpus: '0.1',
+            slaveMem: '1024',
+            executorCpus: '0.1',
+            maxExecutors: '1',
+            executorMem: '128',
+            remoteFSRoot: 'jenkins',
+            idleTerminationMinutes: '1',
+            jvmArgs: '-Xms16m -XX:+UseConcMarkSweepGC -Djava.net.preferIPv4Stack=true',
+            jnlpArgs: '-auth admin:!password123',
+            mode: 'NORMAL',
+            labelString: 'mesos-1GB'
+          },
+          { slaveCpus: '0.1',
+            slaveMem: '2048',
+            executorCpus: '0.1',
+            maxExecutors: '1',
+            executorMem: '128',
+            remoteFSRoot: 'jenkins',
+            idleTerminationMinutes: '1',
+            jvmArgs: '-Xms16m -XX:+UseConcMarkSweepGC -Djava.net.preferIPv4Stack=true',
+            jnlpArgs: '-auth admin:!password123',
+            mode: 'NORMAL',
+            labelString: 'mesos-2GB'
+          },
+          { slaveCpus: '0.1',
+            slaveMem: '4096',
+            executorCpus: '0.1',
+            maxExecutors: '1',
+            executorMem: '128',
+            remoteFSRoot: 'jenkins',
+            idleTerminationMinutes: '1',
+            jvmArgs: '-Xms16m -XX:+UseConcMarkSweepGC -Djava.net.preferIPv4Stack=true',
+            jnlpArgs: '-auth admin:!password123',
+            mode: 'NORMAL',
+            labelString: 'mesos-4GB'
+          },
+          { slaveCpus: '0.1',
+            slaveMem: '8192',
+            executorCpus: '0.2',
+            maxExecutors: '1',
+            executorMem: '128',
+            remoteFSRoot: 'jenkins',
+            idleTerminationMinutes: '1',
+            jvmArgs: '-Xms16m -XX:+UseConcMarkSweepGC -Djava.net.preferIPv4Stack=true',
+            jnlpArgs: '-auth admin:!password123',
+            mode: 'NORMAL',
+            labelString: 'mesos-8GB'
+          }
+        ]
+      }
+    ]
+
+  # list of jenkins plugins to be installed on the jenkins box
+  plugins: [
+    { name: 'ace-editor', version: '1.1'},
+    { name: 'analysis-collector', version: '1.47'},
+    { name: 'analysis-core', version: '1.76'},
+    { name: 'ansicolor', version: '0.4.1'},
+    { name: 'ant', version: '1.3'},
+    { name: 'antisamy-markup-formatter', version: '1.3'},
+    { name: 'any-buildstep', version: '0.1'},
+    { name: 'async-http-client', version: '1.7.8'},
+    { name: 'aws-java-sdk', version: '1.10.45'},
+    { name: 'branch-api', version: '1.10'},
+    { name: 'build-failure-analyzer', version: '1.15.0'},
+    { name: 'build-flow-plugin', version: '0.19'},
+    { name: 'build-pipeline-plugin', version: '1.4.5'},
+    { name: 'build-timeout', version: '1.14'},
+    { name: 'build-with-parameters', version: '1.3'},
+    { name: 'buildgraph-view', version: '1.1.1'},
+    { name: 'ci-game', version: '1.20'},
+    { name: 'checkstyle', version: '3.45'},
+    { name: 'claim', version: '2.8'},
+    { name: 'cloudbees-folder', version: '5.12'},
+    { name: 'cobertura', version: '1.9.7'},
+    { name: 'conditional-buildstep', version: '1.3.5'},
+    { name: 'config-autorefresh-plugin', version: '1.0'},
+    { name: 'config-file-provider', version: '2.11'},
+    { name: 'configurationslicing', version: '1.40'},
+    { name: 'copyartifact', version: '1.37'},
+    { name: 'copy-to-slave', version: '1.4.4'},
+    { name: 'credentials', version: '2.1.4'},
+    { name: 'cvs', version: '2.12'},
+    { name: 'dashboard-view', version: '2.9.9'},
+    { name: 'description-setter', version: '1.10'},
+    { name: 'delivery-pipeline-plugin', version: '0.8.7'},
+    { name: 'dry', version: '2.44'},
+    { name: 'durable-task', version: '1.5'},
+    { name: 'ec2', version: '1.31'},
+    { name: 'emma', version: '1.29'},
+    { name: 'envinject', version: '1.92.1'},
+    { name: 'external-monitor-job', version: '1.4'},
+    { name: 'findbugs', version: '4.64'},
+    { name: 'flaky-test-handler', version: '1.0.1'},
+    { name: 'flexible-publish', version: '0.15.2'},
+    { name: 'gerrit-trigger', version: '2.20.0'},
+    { name: 'ghprb', version: '1.29' },
+    { name: 'git', version: '2.5.3'},
+    { name: 'git-client', version: '1.19.7'},
+    { name: 'git-server', version: '1.7'},
+    { name: 'github', version: '1.18.1'},
+    { name: 'github-api', version: '1.72.1'},
+    { name: 'github-branch-source', version: '1.4'},
+    { name: 'github-organization-folder', version: '1.2'},
+    { name: 'github-oauth', version: '0.22.2'},
+    { name: 'gitlab-hook', version: '1.1.0'},
+    { name: 'global-build-stats', version: '1.3'},
+    { name: 'greenballs', version: '1.14'},
+    { name: 'handlebars', version: '1.1.1'},
+    { name: 'icon-shim', version: '2.0.3'},
+    { name: 'jackson2-api', version: '2.7.3'},
+    { name: 'javadoc', version: '1.3'},
+    { name: 'jclouds-jenkins', version: '2.8'},
+    { name: 'jenkins-flowdock-plugin', version: '1.1.8'},
+    { name: 'jenkins-multijob-plugin', version: '1.16'},
+    { name: 'jenkinswalldisplay', version: '0.6.30'},
+    { name: 'job-dsl', version: '1.48'},
+    { name: 'job-log-logger-plugin', version: '1.0'},
+    { name: 'jquery', version: '1.7.2-1'},
+    { name: 'jquery-ui', version: '1.0.2'},
+    { name: 'jquery-detached', version: '1.2.1'},
+    { name: 'junit', version: '1.15'},
+    { name: 'junit-attachments', version: '1.3'},
+    { name: 'ldap', version: '1.11'},
+    { name: 'locks-and-latches', version: '0.6'},
+    { name: 'log-parser', version: '1.0.8'},
+    { name: 'logging', version: '1.0.0'},
+    { name: 'groovy', version: '1.27'},
+    { name: 'mailer', version: '1.17'},
+    { name: 'mapdb-api', version: '1.0.9.0'},
+    { name: 'mask-passwords', version: '2.8'},
+    { name: 'matrix-auth', version: '1.3.2'},
+    { name: 'matrix-project', version: '1.7.1'},
+    { name: 'maven-plugin', version: '2.13'},
+    { name: 'momentjs', version: '1.1.1'},
+    { name: 'monitoring', version: '1.58.0'},
+    { name: 'multiple-scms', version: '0.3'},
+    { name: 'metrics', version: '3.1.2.9'},
+    { name: 'mesos', version: '0.12.0'},
+    { name: 'naginator', version: '1.13'},
+    { name: 'nested-view', version: '1.14'},
+    { name: 'node-iterator-api', version: '1.5.0'},
+    { name: 'notification', version: '1.9'},
+    { name: 'openstack-cloud', version: '1.7'},
+    { name: 'pam-auth', version: '1.2'},
+    { name: 'parameterized-trigger', version: '2.32'},
+    { name: 'pipeline-build-step', version: '2.2'},
+    { name: 'pipeline-input-step', version: '2.0'},
+    { name: 'pipeline-stage-step', version: '2.1'},
+    { name: 'pipeline-stage-view', version: '1.6'},
+    { name: 'pipeline-rest-api', version: '1.3'},
+    { name: 'plain-credentials', version: '1.1'},
+    { name: 'pmd', version: '3.44'},
+    { name: 'powershell', version: '1.3'},
+    { name: 'preSCMbuildstep', version: '0.3'},
+    { name: 'project-inheritance', version: '1.5.3'},
+    { name: 'promoted-builds', version: '2.27'},
+    { name: 'publish-over-ssh', version: '1.12'},
+    { name: 'python-wrapper', version: '1.0.3'},
+    { name: 'rabbitmq-consumer', version: '2.7'},
+    { name: 'rebuild', version: '1.25'},
+    { name: 'remote-terminal-access', version: '1.6'},
+    { name: 'ruby-runtime', version: '0.12'},
+    { name: 'run-condition', version: '1.0'},
+    { name: 'sauce-ondemand', version: '1.154'},
+    { name: 'saferestart', version: '0.3'},
+    { name: 'scm-api', version: '1.2'},
+    { name: 'script-security', version: '1.21'},
+    { name: 'show-build-parameters', version: '1.0'},
+    { name: 'slave-setup', version: '1.9'},
+    { name: 'ssh-agent', version: '1.10'},
+    { name: 'ssh-credentials', version: '1.12'},
+    { name: 'ssh-slaves', version: '1.11'},
+    { name: 'stashNotifier', version: '1.10.4'},
+    { name: 'structs', version: '1.3'},
+    { name: 'subversion', version: '2.6'},
+    { name: 'support-core', version: '2.32'},
+    { name: 'tasks', version: '4.48'},
+    { name: 'test-stability', version: '1.0'},
+    { name: 'throttle-concurrents', version: '1.8.4'},
+    { name: 'timestamper', version: '1.7.1'},
+    { name: 'token-macro', version: '1.12.1'},
+    { name: 'translation', version: '1.12'},
+    { name: 'violations', version: '0.7.11'},
+    { name: 'vsphere-cloud', version: '2.13'},
+    { name: 'warnings', version: '4.53'},
+    { name: 'windows-slaves', version: '1.1'},
+    { name: 'workflow-aggregator', version: '2.2'},
+    { name: 'workflow-api', version: '2.1'},
+    { name: 'workflow-basic-steps', version: '2.1'},
+    { name: 'workflow-cps', version: '2.10'},
+    { name: 'workflow-cps-global-lib', version: '2.1'},
+    { name: 'workflow-durable-task-step', version: '2.4'},
+    { name: 'workflow-job', version: '2.4'},
+    { name: 'workflow-multibranch', version: '2.8'},
+    { name: 'workflow-scm-step', version: '2.2'},
+    { name: 'workflow-step-api', version: '2.3'},
+    { name: 'workflow-support', version: '2.2'},
+    { name: 'xunit', version: '1.102'},
+    { name: 'ws-cleanup', version: '0.29'},
+  ]
+
+  # list of jenkins plugins that aren't available upstream
+  # we will fetch these directly
+  non_published_plugins:
+    - { name: 'jenkins-statsd', version: '31002', url: 'https://github.com/Azulinho/jenkins-statsd-plugin/raw/master/jenkins-statsd.hpi'}
+
+
+  # environment global variables to set on the Slave Nodes
+  globalNodeProperties:
+    - { globalvariable: 'envVar1', value: 'test1' }
+    - { globalvariable: 'envVar2', value: 'test2' }
+
+
+  # The views block, describes the main jenkins views (tabs)
+  views:
+    list:
+      # Let's define a 'Home' view, as we will set the usual jenkins
+      # default 'All' view to show all jobs across all the folders
+      - { name: 'Home',
+          description: 'Home',
+          includeRegex: '.*',
+          columns: &all_columns_view [
+            'hudson.views.StatusColumn',
+            'hudson.views.WeatherColumn',
+            'hudson.views.JobColumn',
+            'hudson.views.LastSuccessColumn',
+            'hudson.views.LastFailureColumn',
+            'hudson.views.LastDurationColumn',
+            'hudson.views.BuildButtonColumn']}
+
+      # Show every job across every folder, see 'recurse'
+      - { name: 'All',
+          description: 'All jobs',
+          recurse: 'true',
+          includeRegex: '.*',
+          columns: *all_columns_view }
+
+    # The primaryView is the first view you see when you log in to Jenkins
+    primaryView: 'Home'
+
+  # jenkins statds plugin
+  # this should point to the metrics statsd port of the grafana box
+  statsd:
+    prefix: 'test.vagrant.jenkins'
+    host: '192.168.1.253'
+    port: '8125'
+    graphite_port: 2003
+    grafana_port: 140001
+    graphite_view: 'All'
+
+  # jenkins Sauce Labs plugin
+  sauce_labs:
+    reuseSauceAuth: "false"
+    sauceConnectDirectory: "CONNECT_WORKING_DIRECTORY"
+    sauceConnectOptions: "CONNECT_OPTIONS"
+    sauceConnectMaxRetries: "5"
+    sauceConnectRetryWaitTime: "60"
+    environmentVariablePrefix: "SELENIUM_ENVIRON_VARIABLE_PREFIX"
+    sendUsageData: "false"
+
+  # the seed job lives at the root of the jenkins source code repository.
+  # after forking the iHCM_ci_platform repository, configure the location
+  # of the seed job
+  seed_job:
+    poll_scm_cron_line: '*/6 * * * *'
+    seed_job_filename: 'jenkins-job-dsl.groovy'
+    jenkins_stash_credential: 'username:password'
+    stash_url: 'https://bitbucket.acme.org'
+    matchBranchesRegex: 'FILL_ME_IN_WITH_A_REGEX_THAT_MATCHES_BRANCHES'
+    matchProjectsRegex: 'FILL_ME_IN_WITH_A_REGEX_THAT_MATCHES_PROJECTS'
+    matchReposRegex: 'FILL_ME_IN_WITH_A_REGEX_THAT_MATCHES_REPOS'
+    cloneTheseReposFirst:
+      - { url: 'MY BITBUCKET_URL_WITH_MY_DSL_HELPERS_FILES',
+          branch: 'BRANCH_TO_CHECKOUT',
+          path: 'LOCAL_WORKSPACE_DIRECTORY_TO_CLONE_TO',
+          credentials: 'GIT_CREDENTIALS_FOR_BITBUCKET' }
