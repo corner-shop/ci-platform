@@ -20,3 +20,4 @@ jenkins.sh
 .ropeproject/
 package.box
 target
+get-pip.py
