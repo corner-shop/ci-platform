@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+{% set cfg=jenkins                                                           %}
+<org.jenkinsci.plugins.statsd.StatsdConfig plugin="jenkins-statsd@0.1-SNAPSHOT">
+    <prefix>{{ cfg.statsd.prefix |default('temp')}}</prefix>
+    <host>{{ cfg.statsd.host }}</host>
+    <port>{{ cfg.statsd.port |default('8125')}}</port>
+</org.jenkinsci.plugins.statsd.StatsdConfig>

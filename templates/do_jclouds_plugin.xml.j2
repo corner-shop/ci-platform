@@ -1,0 +1,57 @@
+{% macro  do_jclouds_plugin(item)                                     %}
+    <jenkins.plugins.jclouds.compute.JCloudsCloud plugin="jclouds-jenkins@2.8">
+        <name>{{ item.name }}</name>
+        <identity>{{ item.identity }}</identity>
+        <credential>{{ item.credential }}</credential>
+        <providerName>{{ item.providerName }}</providerName>
+        <privateKey>{{ item.privateKey | join('\n') }}</privateKey>
+        <publicKey>{{ item.publicKey |join('') }}</publicKey>
+        <endPointUrl>{{ item.endPointUrl }}</endPointUrl>
+        <profile>{{ item.profile }}</profile>
+        <retentionTime>{{ item.retentionTime }}</retentionTime>
+        <instanceCap>{{ item.instanceCap }}</instanceCap>
+        <scriptTimeout>{{ item.scripTimeout |default('600000')}}</scriptTimeout>
+        <startTimeout>{{ item.startTimeout |default('600000')}}</startTimeout>
+        <templates>
+{%  for t in item.templates %}
+            <jenkins.plugins.jclouds.compute.JCloudsSlaveTemplate>
+                <name>{{ t.name }}</name>
+                <imageId>{{ t.imageId |default('')}}</imageId>
+                <hardwareId>{{ t.hardwareId |default('')}}</hardwareId>
+
+{#              these next fields, are breaking the jclouds plugin
+
+                <imageNameRegex>{{ t.imageNameRegex |default('')}}</imageNameRegex>
+                <cores>{{ t.cores |default('') }}</cores>
+                <ram>{{ t.ram |default('')}}</ram>
+                <osFamily>{{ t.osFamily |default('')}}</osFamily>
+                <osVersion>{{ t.osVersion |default('')}}</osVersion>
+
+#}
+                <labelString>{{ t.labelString }}</labelString>
+                <description>{{ t.description |default('')}}</description>
+                <locationId>{{ t.locationId |default('DFW')}}</locationId>
+                <initScript>{{ t.initScript | default('') | join('\n') }}</initScript>
+                <userData>{{ t.userData | default('') | join('\n') }}</userData>
+                <numExecutors>{{ t.numExecutors |default('1')}}</numExecutors>
+                <stopOnTerminate>{{ t.stopOnTerminate |default('false')}}</stopOnTerminate>
+                <vmUser>{{ t.vmUser |default('jenkins') }}</vmUser>
+                <preInstalledJava>{{ t.preInstalledJava | default('true') }}</preInstalledJava>
+                <preExistingJenkinsUser>{{ t.preExistingJenkinsUser |default('true') }}</preExistingJenkinsUser>
+                <jenkinsUser>{{ t.jenkinsUser | default('jenkins') }}</jenkinsUser>
+                <fsRoot>{{ t.fsRoot |default('/tmp') }}</fsRoot>
+                <allowSudo>{{ t.allowSudo |default('true') }}</allowSudo>
+                <installPrivateKey>{{ t.installPrivateKey | default('false') }}</installPrivateKey>
+                <overrideRetentionTime>{{ t.overrideRetentionTime |default('100') }}</overrideRetentionTime>
+                <spoolDelayMs>{{ t.spoolDelayMs | default('100') }}</spoolDelayMs>
+                <delayLockObject/>
+                <assignFloatingIp>{{ t.assignFloatingIp |default('false') }}</assignFloatingIp>
+                <keyPairName>{{ t.keyPairName }}</keyPairName>
+                <assignPublicIp>{{ t.assignPublicIp | default('false') }}</assignPublicIp>
+                <networks>{{ t.networks |default('') |join(',') }}</networks>
+                <securityGroups>{{ t.securityGroups |default('') |join(',')}}</securityGroups>
+            </jenkins.plugins.jclouds.compute.JCloudsSlaveTemplate>
+{%  endfor %}
+        </templates>
+    </jenkins.plugins.jclouds.compute.JCloudsCloud>
+{%  endmacro                                                             %}

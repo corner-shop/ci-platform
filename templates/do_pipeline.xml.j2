@@ -1,0 +1,24 @@
+{% macro  do_pipeline(item)                                     %}
+    <au.com.centrumsystems.hudson.plugin.buildpipeline.BuildPipelineView plugin="build-pipeline-plugin@1.4.5">
+      <owner class="hudson" reference="../../.."/>
+      <name>{{ pipeline.name }}</name>
+      <filterExecutors>{{ pipeline.filterExecutors |default('true')}}</filterExecutors>
+      <filterQueue>{{ pipeline.filterExecutors |default('true') }}</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+      <selectedJob>{{ pipeline.selectedJob }}</selectedJob>
+      <gridBuilder class="au.com.centrumsystems.hudson.plugin.buildpipeline.DownstreamProjectGridBuilder">
+      <firstJob>{{ pipeline.firstJob }}</firstJob>
+      </gridBuilder>
+      <noOfDisplayedBuilds>{{ pipeline.noOfDisplayedBuilds | default(5) }}</noOfDisplayedBuilds>
+      <buildViewTitle>{{ pipeline.buildViewTitle |default('') }}</buildViewTitle>
+      <consoleOutputLinkStyle>{{ pipeline.consoleOutputLinkStyle |default('Lightbox') }}</consoleOutputLinkStyle>
+      <cssUrl></cssUrl>
+      <triggerOnlyLatestJob>{{ pipeline.triggerOnlyLatestJob | default('false')}}</triggerOnlyLatestJob>
+      <alwaysAllowManualTrigger>{{ pipeline.alwaysAllowManualTrigger |default('true') }}</alwaysAllowManualTrigger>
+      <showPipelineParameters>{{ pipeline.showPipelineParameters |default('true')}}</showPipelineParameters>
+      <showPipelineParametersInHeaders>{{ pipeline.showPipelineParametersInHeaders |default('false') }}</showPipelineParametersInHeaders>
+      <startsWithParameters>{{ pipeline.startsWithParameters |default('false') }}</startsWithParameters>
+      <refreshFrequency>{{ pipeline.refreshFrequency | default(60) }}</refreshFrequency>
+      <showPipelineDefinitionHeader>{{ pipeline.showPipelineDefinitionHeader |default('false')}}</showPipelineDefinitionHeader>
+    </au.com.centrumsystems.hudson.plugin.buildpipeline.BuildPipelineView>
+{% endmacro %}

@@ -1,0 +1,165 @@
+import groovy.json.JsonSlurper
+import java.util.regex.*
+
+// seed.job.groovy
+// This code iterates over all the Stash projects, repos and branches
+// looking for a jenkins job dsl file that match our desired regex.
+// When it finds a valid jenkins job dsl file, it copies it to the local
+// workspace where it will be processed by the next build step in the jenkins
+// seed job.
+
+
+// The jenkins main seed job has two phases (or two build steps),
+
+// it executes this seed.jobs.groovy file which iterates over stash looking for jenkins job DSL files on particular projects/repos/branches.
+// It then saves them locally on the workspace under target/
+// the second step, executes another process job DSL task which sucks up all the jenkins dsl files under target/*
+
+// Since the second step simply processes any files, we need to give jenkins a way to know which project/repo/branch that particular file come from.
+// We do that by inserting at the top of DSL each file a block of variables containing that information.
+// With this info, the second step can simply process all the DSL and get the correct names generated.
+
+
+/* the following block of variables are provided by Jinja2 templating during
+   the make config-volume task */
+jenkinsGitCredential = '{{ jenkins_stash_credential }}'
+jenkinsJobDslFileName = '{{ seed_job_filename }}'
+stashUrl = '{{ stash_url }}'
+matchBranchesRegex = '{{ matchBranchesRegex }}'
+matchProjectsRegex = '{{ matchProjectsRegex }}'
+matchReposRegex = '{{ matchReposRegex }}'
+
+def authString = "${jenkinsGitCredential}".getBytes().encodeBase64().toString()
+
+// STASH limits results to 25 per page, we skip get and get the full bounty //
+def projectsApi = new URL("${stashUrl}/rest/api/1.0/projects?limit=10000").openConnection()
+projectsApi.setRequestProperty("Authorization", "Basic ${authString}")
+
+// get all known projects in Stash //
+def projects = new JsonSlurper().parseText(projectsApi.content.text)
+
+// we iterate over the project list, if we found a project that matches our
+// matchProjectsRegex we dig down, retrieve the list of Repositories from
+// that project that match our matchReposRegex and look further into the
+// branches of that repository to see if they match matchBranchesRegex and
+// contain a jenkins dsl file.
+projects.get("values").each {
+    def stashProjectKey = it.get("key")
+
+    if (stashProjectKey) {
+        println "Found project: ${stashProjectKey}"
+        if ("${stashProjectKey}" ==~ "${matchProjectsRegex}") {
+
+            println "INFO - Searching for repos in project $stashProjectKey"
+
+            def reposApi = new URL("${stashUrl}/rest/api/1.0/projects/${stashProjectKey}/repos?limit=1000").openConnection()
+            reposApi.setRequestProperty("Authorization", "Basic ${authString}")
+
+           def repos = new JsonSlurper().parseText(reposApi.content.text)
+
+                if (repos) {
+                    def repoList = repos.get("values")
+
+                    println "INFO - Found ${repoList.size} repos for project ${stashProjectKey}."
+
+                    repoList.each { repo ->
+                        if (repo.get("slug") ==~ "${matchReposRegex}") {
+                            processRepo(repo, stashProjectKey, jenkinsGitCredential, jenkinsJobDslFileName, stashUrl, authString)
+                        }
+                    }
+                }
+        }
+    }
+}
+
+// iterates over all the branches in an existing repository, checking if they
+// match a particular regex.
+private void processRepo(repo, stashProjectKey, jenkinsGitCredential, jenkinsJobDslFileName, stashUrl, authString) {
+    def repoSlug = repo.get("slug")
+
+    if (repoSlug) {
+
+        println "INFO - Searching for branches in repo $repoSlug"
+
+        def branchApi = new URL("${stashUrl}/rest/api/1.0/projects/${stashProjectKey}/repos/${repoSlug}/branches?limit=10000").openConnection()
+        branchApi.setRequestProperty("Authorization", "Basic ${authString}")
+
+        def branches = new JsonSlurper().parseText(branchApi.content.text)
+
+        branches.get("values").each { branch ->
+            if (branch.get("displayId") ==~ "${matchBranchesRegex}") {
+                processBranch(jenkinsGitCredential, branch, stashProjectKey, repoSlug, jenkinsJobDslFileName, stashUrl, authString)
+            }
+        }
+    }
+}
+
+// checks if a particular branch contains a job DSL definition file
+private void processBranch(jenkinsGitCredential, branch, stashProjectKey, repoSlug, jenkinsJobDslFileName, stashUrl, authString) {
+    def branchName = branch.get("displayId")
+    def branchSimpleName = branchName.replace("/", "-")
+
+    println "INFO - Found branch ${repoSlug} - ${branchName}"
+    println "INFO - Looking for job dsl ..."
+
+    def jobDslUrl = new URL("${stashUrl}/rest/api/1.0/projects/${stashProjectKey}/repos/${repoSlug}/browse/${jenkinsJobDslFileName}?at=refs/heads/${branchName}&raw").openConnection()
+
+   jobDslUrl.setRequestProperty("Authorization", "Basic ${authString}")
+
+
+    def status = jobDslUrl.getResponseCode()
+
+    if (status == 200) {
+        println "INFO - Found job dsl for $repoSlug/${branchName}"
+
+    def dslJson = new JsonSlurper().parseText(jobDslUrl.content.text)
+
+        if (dslJson.get("lines") != null) {
+            try {
+                println "INFO - Processing job dsl for ${repoSlug}/${branchName}"
+
+                WriteJobDsl(dslJson, "${stashProjectKey}", "${repoSlug}", "${branchSimpleName}", "${branchName}")
+            } catch (Exception e) {
+                println "ERROR - Couldn't write job dsl for ${repoSlug}/${branchName}: ${e.getMessage()} \n ${e.printStackTrace()}"
+            }
+        }
+
+    } else {
+        println "WARN - No jenkins job dsl found for ${repoSlug}/${branchName}"
+    }
+}
+
+// generates a local job dsl file in the jenkins workspace, while inserting
+// some additional variables at the job of the file.
+// stuff like project, repo, branch name.
+private void WriteJobDsl(dslJson, stashProjectKey, repoSlug, branchSimpleName, branchName) {
+    def jobDsl = [];
+    /* inject the project, repo and branch name as variables directly into the DSL
+       this simplifies the workflow and allows to batch the generation of all the jobs in one go. */
+    jobDsl.add("def _injected_var_PROJECT='${stashProjectKey}'")
+    jobDsl.add("def _injected_var_REPO='${repoSlug}'")
+    jobDsl.add("def _injected_var_BRANCH='${branchName}'")
+    jobDsl.add("def _injected_var_BRANCH_SIMPLE_NAME='${branchSimpleName}'")
+
+    dslJson.get("lines").each {
+        jobDsl.add(it.text)
+    }
+
+    def jobDslString = jobDsl.join("\n")
+    /* jenkins job DSL won't eat any filenames containing anything else than '_' or a-zA-Z0-9 */
+    def filename="${ stashProjectKey}_${repoSlug}_${branchSimpleName}".replaceAll("[\\.]", "_").replaceAll("-", "_")
+    def path="target/${ filename}"
+
+    collected_dsl = new File(path)
+    collected_dsl.write(jobDslString)
+
+    println("INFO - Wrote job file ${path}")
+}
+
+// see this for gitlab support
+// https://gist.github.com/legege/f557233667b98a50bd04
+
+
+// for github
+// https://gist.github.com/davidpelayo/de4181e93584df7443c9
+//http://stackoverflow.com/questions/32700094/dsl-job-in-jenkins-and-github

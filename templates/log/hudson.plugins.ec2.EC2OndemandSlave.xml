@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<log>
+  <name>hudson.plugins.ec2.EC2OndemandSlave</name>
+  <targets>
+    <target>
+      <name>hudson.plugins.ec2.EC2OndemandSlave</name>
+      <level>-2147483648</level>
+    </target>
+  </targets>
+</log>

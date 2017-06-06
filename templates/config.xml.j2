@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8'?>
+{% from 'do_jclouds_plugin.xml.j2' import do_jclouds_plugin with context    -%}
+{% from 'do_ec2_plugin.xml.j2' import do_ec2_plugin with context            -%}
+{% from 'do_pipeline.xml.j2' import do_pipeline with context                -%}
+{% from 'do_list_view.xml.j2' import do_list_view with context              -%}
+{% from 'do_authorizationStrategy.xml.j2' import do_authorizationStrategy with context -%}
+{% from 'do_securityRealm.xml.j2' import do_securityRealm with context      -%}
+{% from 'do_mesos_cloud.j2' import do_mesos_cloud with context              -%}
+{% from 'do_global_node_properties.xml.j2' import do_global_node_properties with context -%}
+<hudson>
+{% set cfg=jenkins                                                           %}
+  <disabledAdministrativeMonitors/>
+  <version>{{ cfg.version  }}</version>
+  <numExecutors>{{ cfg['numExecutors'] | default(2) }}</numExecutors>
+  <mode>{{ cfg['mode'] | default('NORMAL') }}</mode>
+  <useSecurity>{{ cfg['useSecurity'] | default('true') }}</useSecurity>
+{%  if cfg.authorizationStrategy is defined                                  %}
+{{  do_authorizationStrategy(cfg['authorizationStrategy']) }}
+{%  else                                                                     %}
+  <authorizationStrategy class="hudson.security.AuthorizationStrategy$Unsecured"/>
+{%  endif                                                                    %}
+{%  if cfg.securityRealm is defined                                          %}
+{{  do_securityRealm(cfg['securityRealm']) }}
+{%  else                                                                     %}
+  <securityRealm class="hudson.security.SecurityRealm$None"/>
+{%  endif                                                                    %}
+  <disableRememberMe>{{ cfg['disableRememberMe'] | default('false') }}</disableRememberMe>
+  <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy"/>
+  <workspaceDir>{{ cfg['workspaceDir'] | default('${ITEM_ROOTDIR}/workspace') }}</workspaceDir>
+  <buildsDir>{{cfg['buildsDir'] | default('${ITEM_ROOTDIR}/builds') }}</buildsDir>
+  <jdks/>
+  <viewsTabBar class="hudson.views.DefaultViewsTabBar"/>
+  <myViewsTabBar class="hudson.views.DefaultMyViewsTabBar"/>
+  <clouds>
+{%  if cfg.clouds is defined                                                 %}
+
+{#   configuration for the ec2 plugin                                        #}
+{%      if cfg.clouds.ec2_plugin is defined                                  %}
+{%          for item in cfg.clouds.ec2_plugin                                %}
+{{              do_ec2_plugin(item)                                          }}
+{%          endfor                                                           %}
+{%      endif                                                                %}
+
+{#   configuration for the jclouds plugin                                    #}
+{%      if cfg.clouds.jclouds_plugin is defined %}
+{%          for item in cfg.clouds.jclouds_plugin %}
+{{              do_jclouds_plugin(item)                                      }}
+{%          endfor                                                           %}
+{%      endif  %}
+
+{#   configuration for the mesosClouds plugin                                #}
+{%      if cfg.clouds.MesosCloud_plugin is defined %}
+{%          for item in cfg.clouds.MesosCloud_plugin %}
+{{              do_mesos_cloud(item)                                      }}
+{%          endfor                                                           %}
+{%      endif  %}
+{%  endif  %}
+  </clouds>
+
+  <quietPeriod>{{ cfg.quietPeriod | default('5')}}</quietPeriod>
+
+  <slaves/>
+  <scmCheckoutRetryCount>{{ cfg['scmCheckoutRetryCount'] | default('0') }}</scmCheckoutRetryCount>
+
+{%  if cfg.views is defined                                                  %}
+  <views>
+{# we always leave the default 'All' view #}
+{%      if cfg.views.list is defined                                         %}
+{%          for view in cfg.views.list                                       %}
+{{              do_list_view(view)                                           }}
+{%          endfor                                                           %}
+{%      endif                                                                %}
+{%      if cfg.views.pipeline is defined                                     %}
+{%          for pipeline in cfg.views.pipeline                               %}
+{{              do_pipeline(pipeline)                                        }}
+{%          endfor                                                           %}
+{%      endif                                                                %}
+  </views>
+  <primaryView>{{ cfg.views.primaryView | default('All') }}</primaryView>
+{%  endif                                                                    %}
+
+
+
+  <slaveAgentPort>{{ cfg.slaveAgentPort | default('50000') }}</slaveAgentPort>
+  <label>{{ cfg.master_label | default('master') }}</label>
+
+{%  if cfg.globalNodeProperties is defined                                   %}
+{{    do_global_node_properties(cfg.globalNodeProperties )                   }}
+{%  endif                                                                    %}
+
+</hudson>

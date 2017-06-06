@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+{% set cfg=jenkins %}
+<hudson.util.DescribableList>
+    <hudson.node__monitors.ArchitectureMonitor>
+        <ignored>{{ cfg['monitors']['ArchitectureMonitor']['ignored'] | default('false') }}</ignored>
+    </hudson.node__monitors.ArchitectureMonitor>
+
+    <hudson.node__monitors.ClockMonitor>
+        <ignored>{{ cfg['monitors']['ClockMonitor']['ignored'] | default('true') }}</ignored>
+    </hudson.node__monitors.ClockMonitor>
+
+    <hudson.node__monitors.DiskSpaceMonitor>
+        <ignored>{{ cfg['monitors']['DiskSpaceMonitor']['ignored'] | default('false') }}</ignored>
+        <freeSpaceThreshold>{{ cfg['monitors']['DiskSpaceMonitor']['freeSpaceThreshold'] | default('1GB') }}</freeSpaceThreshold>
+    </hudson.node__monitors.DiskSpaceMonitor>
+
+    <hudson.node__monitors.SwapSpaceMonitor>
+        <ignored>{{ cfg['monitors']['SwapSpaceMonitor']['ignored'] | default('true') }}</ignored>
+    </hudson.node__monitors.SwapSpaceMonitor>
+
+    <hudson.node__monitors.TemporarySpaceMonitor>
+        <ignored>{{ cfg['monitors']['TemporarySpaceMonitor']['ignored'] | default('true') }}</ignored>
+        <freeSpaceThreshold>{{ cfg['monitors']['TemporarySpaceMonitor']['freeSpaceThreshold'] | default('1GB') }}</freeSpaceThreshold>
+    </hudson.node__monitors.TemporarySpaceMonitor>
+
+    <hudson.node__monitors.ResponseTimeMonitor>
+        <ignored>{{ cfg['monitors']['ResponseTimeMonitor']['ignored'] | default('true') }}</ignored>
+    </hudson.node__monitors.ResponseTimeMonitor>
+</hudson.util.DescribableList>

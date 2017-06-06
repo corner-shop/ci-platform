@@ -1,0 +1,6 @@
+{% macro  do_securityRealm(item)                                             %}
+  <securityRealm class="{{ item.type }}">
+    <disableSignup>{{ item.disableSignup }}</disableSignup>
+    <enableCaptcha>{{ item.enableCaptcha }}</enableCaptcha>
+  </securityRealm>
+{% endmacro                                                                  %}

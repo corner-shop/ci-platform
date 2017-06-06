@@ -1,0 +1,21 @@
+{% macro do_list_view(view)     %}
+    <listView>
+      <owner class="hudson" reference="../../.."/>
+      <name>{{ view.name }}</name>
+      <description>{{ view.description | default('') }}</description>
+      <filterExecutors>{{ view.filterExecutors | default('true')}}</filterExecutors>
+      <filterQueue>{{ view.filterQueue |default('true') }}</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+      <jobNames>
+        <comparator class="hudson.util.CaseInsensitiveComparator"/>
+      </jobNames>
+      <jobFilters/>
+      <columns>
+{%              for col in view.columns %}
+        <{{ col }}/>
+{%              endfor %}
+      </columns>
+      <includeRegex>{{ view.includeRegex | default('') }}</includeRegex>
+      <recurse>{{ view.recurse | default('false') }}</recurse>
+    </listView>
+{% endmacro %}

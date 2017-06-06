@@ -1,0 +1,9 @@
+{%- set cfg=jenkins                                                         -%}
+{%- if cfg.Proxy is defined                                                 -%}
+<?xml version='1.0' encoding='UTF-8'?>
+<proxy>
+{%    for key, value in cfg.Proxy.iteritems()                                %}
+  <{{ key }}>{{ value }}</{{ key }}>
+{%    endfor                                                                 %}
+</proxy>
+{% endif                                                                     %}

@@ -1,0 +1,68 @@
+{% macro  do_ec2_plugin(item)                                                %}
+    <hudson.plugins.ec2.EC2Cloud plugin="ec2@1.28">
+      <name>{{item.name}}</name>
+      <useInstanceProfileForCredentials>{{ item.useInstanceProfileForCredentials | default('false') }}</useInstanceProfileForCredentials>
+      <accessId>{{ item.accessId }}</accessId>
+      <secretKey>{{ item.secretKey}}</secretKey>
+      <privateKey>
+{%              for pk in item.privatekeys %}
+        <privateKey>{{ pk | join("\n") }}</privateKey>
+{%              endfor                        %}
+      </privateKey>
+      <instanceCap>{{ item.instanceCap | default('1')}}</instanceCap>
+      <templates>
+{%              for t in item.templates %}
+        <hudson.plugins.ec2.SlaveTemplate>
+          <ami>{{ t.ami }}</ami>
+          <description>{{ t.description }}</description>
+          <zone>{{ t.zone }}</zone>
+          <securityGroups>{{ t.securityGroups }}</securityGroups>
+          <remoteFS>{{ t.remoteFS |default('/tmp') }}</remoteFS>
+          <type>{{ t.type | default('T2Micro')}}</type>
+          <labels>{{ t.labels }}</labels>
+          <mode>{{t.mode |default('NORMAL')}}</mode>
+          <initScript>
+{%                  for command in t.initscript %}
+{{ command }}
+{%                  endfor %}
+          </initScript>
+          <tmpDir>{{t.tmpDir |default('') }}</tmpDir>
+          <userData>{{ t.userData |default('') }}</userData>
+          <numExecutors>{{ t.numExecutors |default('1') }}</numExecutors>
+          <remoteAdmin>{{ t.remoteAdmin }}</remoteAdmin>
+          <jvmopts>{{ t.jvmopts |default('')}}</jvmopts>
+          <subnetId>{{ t.subnetId |default('') }}</subnetId>
+          <idleTerminationMinutes>{{ t.idleTerminationMinutes | default('1') }}</idleTerminationMinutes>
+          <iamInstanceProfile>{{ t.iamInstanceProfile |default('') }}</iamInstanceProfile>
+          <useEphemeralDevices>{{ t.useEphemeralDevices |default('false')}}</useEphemeralDevices>
+          <customDeviceMapping>{{ t.customDeviceMapping|default('')}}</customDeviceMapping>
+          <instanceCap>{{ t.instanceCap }}</instanceCap>
+          <stopOnTerminate>{{ t.stopOnTerminate |default('false')}}</stopOnTerminate>
+          <tags>
+{%                  for tag in t.tags %}
+            <hudson.plugins.ec2.EC2Tag>
+              <name>{{ tag.name }}</name>
+              <value>{{ tag.value }}</value>
+            </hudson.plugins.ec2.EC2Tag>
+{%                  endfor            %}
+            <hudson.plugins.ec2.EC2Tag>
+              <name>jenkins_master</name>
+              <value>{{ansible_ec2_public_ipv4}} {{ ansible_hostname }}</value>
+            </hudson.plugins.ec2.EC2Tag>
+          </tags>
+          <usePrivateDnsName>{{ t.usePrivateDnsName |default('false')}}</usePrivateDnsName>
+          <associatePublicIp>{{ t.associatePublicIp | default('false')}}</associatePublicIp>
+          <useDedicatedTenancy>false</useDedicatedTenancy>
+          <amiType class="hudson.plugins.ec2.UnixData">
+            <rootCommandPrefix>{{ t.rootCommandPrefix }}</rootCommandPrefix>
+            <sshPort>{{ t.sshPort |default('22')}}</sshPort>
+          </amiType>
+          <launchTimeout>{{t.launchTimeout|default('2147483647')}}</launchTimeout>
+          <connectBySSHProcess>{{t.connectBySSHProcess |default('true')}}</connectBySSHProcess>
+        </hudson.plugins.ec2.SlaveTemplate>
+{%              endfor                        %}
+      </templates>
+      <region>{{ item.region }}</region>
+    </hudson.plugins.ec2.EC2Cloud>
+
+{%  endmacro                                                                 %}

@@ -1,0 +1,9 @@
+{%- set cfg=jenkins                                                         -%}
+{%- if cfg.sauce_labs is defined                                            -%}
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson.plugins.sauce__ondemand.PluginImpl plugin="sauce-ondemand@1.154">
+  {% for key, value in cfg.sauce_labs.iteritems()                            %}
+  <{{ key }}>{{ value }}</{{ key }}>
+  {% endfor                                                                  %}
+</hudson.plugins.sauce__ondemand.PluginImpl>
+{% endif                                                                     %}

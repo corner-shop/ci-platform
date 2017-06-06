@@ -1,0 +1,22 @@
+{% macro do_global_node_properties(globalvariables)     %}
+{%  if globalvariables|count > 0                        %}
+  <globalNodeProperties>
+    <hudson.slaves.EnvironmentVariablesNodeProperty>
+      <envVars serialization="custom">
+        <unserializable-parents/>
+        <tree-map>
+          <default>
+            <comparator class="hudson.util.CaseInsensitiveComparator"/>
+          </default>
+          <int>{{ globalvariables |count }}</int>
+{%      for item in globalvariables                     %}
+          <string>{{ item.globalvariable }}</string>
+          <string>{{ item.value }}</string>
+{%      endfor                                          %}
+        </tree-map>
+      </envVars>
+    </hudson.slaves.EnvironmentVariablesNodeProperty>
+
+  </globalNodeProperties>
+{%  endif                                                %}
+{% endmacro %}

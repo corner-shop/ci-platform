@@ -1,0 +1,34 @@
+{% macro  do_mesos_cloud(item)                                                %}
+    <org.jenkinsci.plugins.mesos.MesosCloud plugin="mesos@0.12.0">
+      <name>{{item.name}}</name>
+      <nativeLibraryPath>{{item.nativeLibraryPath}}</nativeLibraryPath>
+      <master>{{item.master}}</master>
+      <description>{{item.description}}</description>
+      <frameworkName>{{item.frameworkName}}</frameworkName>
+      <role>{{ item.role |default('*')}}</role>
+      <slavesUser>{{item.slavesUser}}</slavesUser>
+      <credentialsId>{{item.credentialsId |default('')}}</credentialsId>
+      <checkpoint>{{item.checkpoint |default('true')}}</checkpoint>
+      <onDemandRegistration>{{item.onDemandRegistration |default('true')}}</onDemandRegistration>
+      <declineOfferDuration>{{ item.declineOfferDuration |default('600000') }}</declineOfferDuration>
+      <jenkinsURL>{{item.jenkinsURL }}</jenkinsURL>
+      <slaveInfos>
+{%      for slave in item.slaveInfos                                         %}
+        <org.jenkinsci.plugins.mesos.MesosSlaveInfo>
+        <slaveCpus>{{slave.slaveCpus}}</slaveCpus>
+        <slaveMem>{{slave.slaveMem}}</slaveMem>
+        <executorCpus>{{slave.executorCpus}}</executorCpus>
+        <maxExecutors>{{slave.maxExecutors}}</maxExecutors>
+        <executorMem>{{slave.executorMem}}</executorMem>
+        <remoteFSRoot>{{slave.remoteFSRoot}}</remoteFSRoot>
+        <idleTerminationMinutes>{{slave.idleTerminationMinutes}}</idleTerminationMinutes>
+        <jvmArgs>{{ slave.jvmArgs }}</jvmArgs>
+        <jnlpArgs>{{ slave.jnlpArgs }}</jnlpArgs>
+        <defaultSlave>{{ slave.defaultSlave |default('false') }}</defaultSlave>
+        <mode>{{ slave.mode }}</mode>
+        <labelString>{{ slave.labelString }}</labelString>
+        </org.jenkinsci.plugins.mesos.MesosSlaveInfo>
+{%      endfor                                                               %}
+      </slaveInfos>
+    </org.jenkinsci.plugins.mesos.MesosCloud>
+{%  endmacro                                                                 %}

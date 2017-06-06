@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+{% set cfg=jenkins                                                           %}
+<org.jenkinsci.plugins.slave__setup.SetupConfig plugin="slave-setup@1.9">
+  <setupConfigItems>
+{% for config_block in cfg['slave_setup']['apply_slave_config_to_labels']    %}
+{%   set profile=cfg['slave_setup']['profiles'][config_block.config]         %}
+    <org.jenkinsci.plugins.slave__setup.SetupConfigItem>
+      <preLaunchScript>{{ profile['preLaunchScript'] }}</preLaunchScript>
+      <prepareScript>{{ profile['prepareScript'] }}</prepareScript>
+      <filesDir>{{ profile['filesDir'] }}</filesDir>
+      <commandLine>{{profile['commandLine'] }}</commandLine>
+      <deployNow>{{ profile['deployNow'] }}</deployNow>
+      <assignedLabelString>{{ config_block['label'] }}</assignedLabelString>
+      <prepareScriptExecuted>{{ profile['prepareScriptExecuted'] }}</prepareScriptExecuted>
+    </org.jenkinsci.plugins.slave__setup.SetupConfigItem>
+{% endfor                                                                    %}
+  </setupConfigItems>
+</org.jenkinsci.plugins.slave__setup.SetupConfig>

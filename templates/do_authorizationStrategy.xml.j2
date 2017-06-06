@@ -1,0 +1,7 @@
+{% macro  do_authorizationStrategy(item)                                     %}
+  <authorizationStrategy class="{{ item.type }}">
+{% for permission in item.permissions                                        %}
+    <permission>{{ permission }}</permission>
+{% endfor                                                                    %}
+  </authorizationStrategy>
+{%  endmacro                                                                 %}
