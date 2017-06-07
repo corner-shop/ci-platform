@@ -63,6 +63,11 @@ RUN mkdir /etc/service/bootstrap && \
     echo "while true; do sleep 6000; done" >> /etc/service/bootstrap/run && \
     chmod +x /etc/service/*/run
 
+ADD requirements.txt .
+ADD render.py /render.py
+COPY templates/ /templates/
+RUN pip install -r requirements.txt
+
 RUN apt-get clean && \
 	rm -rf /var/lib/apt/lists/* \
 	/tmp/* \
