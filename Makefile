@@ -37,7 +37,7 @@ config-volume:
 	# re-create any jenkins config-volume if they happen to exist
 	docker rm $$CI_CONFIG_VOL || echo
 	docker create -v /config --name $$CI_CONFIG_VOL busybox /bin/true
-	tar -c . | docker run -i --volumes-from $$CI_CONFIG_VOL ci-platform bash -c "mkdir /build && tar -C /build -xvf - && cd /build && pip install -r requirements.txt && python -u render.py  && /bin/tar -C /build/target -cvzf /config/config.tar.gz . && rm -rf target"
+	tar -c . | docker run -i --volumes-from $$CI_CONFIG_VOL azulinho/ci-platform bash -c "mkdir /build && tar -C /build -xvf - && cd /build && pip install -r requirements.txt && python -u render.py  && /bin/tar -C /build/target -cvzf /config/config.tar.gz . && rm -rf target"
 
 
 deploy: ## deploys the docker image
