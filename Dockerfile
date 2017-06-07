@@ -57,8 +57,6 @@ RUN curl -sL "$DEB_URL" \
 
 RUN mkdir /etc/service/bootstrap && \
     echo "#!/bin/bash" >  /etc/service/bootstrap/run && \
-    echo "/bin/rm -rf /var/lib/jenkins/plugins/*" >>  /etc/service/bootstrap/run && \
-    echo "/bin/tar -C / -xvzf /config/config.tar.gz " >> /etc/service/bootstrap/run && \
     echo "/bin/chmod +x /etc/service/*/run" >> /etc/service/bootstrap/run && \
     echo "while true; do sleep 6000; done" >> /etc/service/bootstrap/run && \
     chmod +x /etc/service/*/run
@@ -67,6 +65,10 @@ ADD requirements.txt .
 ADD render.py /render.py
 COPY templates/ /templates/
 RUN pip install -r requirements.txt
+
+ADD bootstrap.sh /
+RUN chmod 755 /bootstrap.sh
+
 
 RUN apt-get clean && \
 	rm -rf /var/lib/apt/lists/* \
@@ -78,3 +80,5 @@ RUN apt-get clean && \
 
 VOLUME /config
 VOLUME /var/lib/jenkins
+
+CMD /bootstrap.sh

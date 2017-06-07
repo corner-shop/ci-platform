@@ -16,15 +16,5 @@ export JENKINS_HOME=/var/lib/jenkins
 # export LIBPROCESS_PORT=external port
 # export libprocess_advertive_...
 
-echo "starting... "
-cd /
-rm -f config.yml ; rm -rf target
-curl $TEMPURL > config.yml && \
-    python -u /render.py && \
-    tar -C /target -cvzf /config/config.tar.gz . && \
-    rm -rf /target && \
-    rm -f config.yml && \
-    echo "finished"
-
 cd /var/lib/jenkins
 exec /sbin/setuser jenkins /usr/bin/java {{ jenkins['jvm_args'] }} -Djava.awt.headless=true  -jar /usr/share/jenkins/jenkins.war --httpPort={{ jenkins['port'] }} 2>&1 | tee -a /var/log/jenkins/jenkins.log
