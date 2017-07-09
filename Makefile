@@ -10,9 +10,6 @@ build: ## builds the docker image
 	docker build \
 		--build-arg DEB_URL="` grep deb_url config.yml | awk '{ print $$NF }'`" \
 		-f Dockerfile  -t azulinho/ci-platform$$BRANCH .
-	docker build \
-		--build-arg TEMPURL=$$TEMPURL \
-		-f Dockerfile.config-vol  -t azulinho/ci-config-vol$$BRANCH .
 
 push:
 	docker push azulinho/ci-platform
@@ -20,19 +17,13 @@ push:
 pull:
 	docker pull azulinho/ci-platform
 
-config-volume:
-	curl -X POST -F file=@config.yml 'http://tempurl-endpoint.service.tinc-core-vpn/api?tempurl=jenkins_config_yml_local&ttl=999'
-	docker run -it --rm --net=host  \
-		-v config-volume:/config \
-		-e TEMPURL=$$TEMPURL \
-		azulinho/ci-config-vol
-
 
 deploy: ## deploys the docker image
-	# kill any jenkins instances
+	curl -X POST -F file=@config.yml 'http://tempurl-endpoint.service.tinc-core-vpn/api?tempurl=jenkins_config_yml_local&ttl=999'
 	docker run -it --rm --net=host \
 		--env JENKINS_HOME="/var/lib/jenkins" \
 		--env JAVA_OPTS=" -Djava.awt.headless=true " \
+		--env TEMPURL="http://tempurl-endpoint.service.tinc-core-vpn/api?tempurl=jenkins_config_yml_local" \
 		-v config-volume:/config \
 		-v var-lib-jenkins:/var/lib/jenkins \
 		-v var-log-jenkins:/var/log/jenkins \

@@ -37,16 +37,19 @@ Install docker, python2.7, virtualenv
 Edit the configuration file, then:
 
     make build 
-    make config-volume # hit control-C when finished
     make deploy
 
 
 *build* generates the docker images
-config-volume produces a tar.gz config file based on the config.yaml
 *deploy* deploys the docker instance.
 
 
-At boot, the init scripts will grab the /config/config.tar.gz and extract them
+At boot, the bootsrap script will attempt to download a config.yaml file from
+the url specified in $TEMPURL, parse that file and download any required
+plugins, produce a /config/config.tar.gz.
+As soon bootstrap is complete, the my_init process is executed.
+
+The jenkins startup script grabs the /config/config.tar.gz and extract them
 over any existing jenkins configuration. This will recycle all the jenkins
 plugins, so that only plugins contained in the /config/config.tar.gz file are
 available for this docker instance.
@@ -69,10 +72,6 @@ curl -X POST -F file=@config.yml 'http://tempurl-endpoint.service.tinc-core-vpn/
 Then use the marathon files:
 
 ci-platform.jenkins.marathon.app.json
-
-ci-platform.config-volume.marathon.app.json
-
-
 
 
 ## Configuration

@@ -46,11 +46,12 @@
   "env": {
     "JAVA_OPTS": " -Djava.awt.headless=true ",
     "JENKINS_HOME": "/var/lib/jenkins",
-    "LIBPROCESS_IP": "169.254.100.19"
+    "LIBPROCESS_IP": "169.254.100.19",
+	"TEMPURL": "http://tempurl-endpoint.service.tinc-core-vpn/api?tempurl=jenkins_config_yml_local"
   },
   "healthChecks": [
     {
-      "gracePeriodSeconds": 300,
+      "gracePeriodSeconds": 600,
       "intervalSeconds": 60,
       "timeoutSeconds": 20,
       "maxConsecutiveFailures": 3,
