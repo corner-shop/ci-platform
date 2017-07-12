@@ -8,8 +8,65 @@ import zipfile
 from jinja2 import FileSystemLoader
 from jinja2.environment import Environment
 from cStringIO import StringIO
+from multiprocessing import Pool
+from functools import partial
+
+
 
 # TODO: REFACTOR this file
+
+def download_plugin(params):
+    (name, version) = params
+    if not os.path.exists('target/var/lib/jenkins/'
+                          'plugins/%s.jpi' % name):
+        print('Downloading plugin %s' % name)
+        r = requests.get(
+            'http://mirror.xmission.com/jenkins/plugins/'
+            '%s/%s/%s.jpi' % (name,
+                              version,
+                              name)
+        )
+
+        # no .jpi available, lets go for a .hpi
+        if r.status_code != 200:
+            r = requests.get(
+                'http://mirror.xmission.com/jenkins/plugins/'
+                '%s/%s/%s.hpi' % (name,
+                                  version,
+                                  name)
+            )
+        with open('target/var/lib/jenkins/'
+                  'plugins/%s.jpi' % name, 'w') as f:
+            f.write(r.content)
+
+        # https://wiki.jenkins-ci.org/display/JENKINS/Pinned+Plugins
+        with open('target/var/lib/jenkins/'
+                  'plugins/%s.jpi.pinned' % name, 'w') as f:
+            f.write('')
+
+        path = 'target/var/lib/jenkins/plugins/%s' % name
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+        with open('target/var/lib/jenkins/plugins'
+                  '/%s.jpi' % name, "r") as f:
+            zf = zipfile.ZipFile(f)
+            zf.extractall(path=path)
+
+
+def install_plugins(plugins):
+    names = []
+    versions = []
+    for p in plugins:
+        names.append(p['name'])
+        versions.append(p['version'])
+
+    jobs = [ (p['name'],p['version']) for p in plugins ]
+
+    pool = Pool(processes=16)
+    pool.map(download_plugin, jobs)
+
+
 
 
 env = Environment()
@@ -148,43 +205,7 @@ for slave in config['jenkins']['static_slaves']:
 
 
 # install plugins
-for plugin in config['jenkins']['plugins']:
-    if not os.path.exists('target/var/lib/jenkins/'
-                          'plugins/%s.jpi' % plugin['name']):
-        print('Downloading plugin %s' % plugin['name'])
-        r = requests.get(
-            'http://mirror.xmission.com/jenkins/plugins/'
-            '%s/%s/%s.jpi' % (plugin['name'],
-                              plugin['version'],
-                              plugin['name']),
-        )
-
-#        no .jpi available, lets go for a .hpi
-        if r.status_code != 200:
-            r = requests.get(
-                'http://mirror.xmission.com/jenkins/plugins/'
-                '%s/%s/%s.hpi' % (plugin['name'],
-                                  plugin['version'],
-                                  plugin['name']),
-            )
-
-        with open('target/var/lib/jenkins/'
-                  'plugins/%s.jpi' % plugin['name'], 'w') as f:
-            f.write(r.content)
-
-        # https://wiki.jenkins-ci.org/display/JENKINS/Pinned+Plugins
-        with open('target/var/lib/jenkins/'
-                  'plugins/%s.jpi.pinned' % plugin['name'], 'w') as f:
-            f.write('')
-
-        path = 'target/var/lib/jenkins/plugins/%s' % plugin['name']
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-        with open('target/var/lib/jenkins/plugins'
-                  '/%s.jpi' % plugin['name'], "r") as f:
-            zf = zipfile.ZipFile(f)
-            zf.extractall(path=path)
+install_plugins(config['jenkins']['plugins'])
 
 
 for plugin in config['jenkins']['non_published_plugins']:
