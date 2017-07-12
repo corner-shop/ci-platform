@@ -29,15 +29,37 @@
         "mode": "RW"
       },
       {
-        "containerPath": "/var/log/jenkins",
+        "containerPath": "/var/log",
         "hostPath": "/data/sync-service/folders/ci-platform/jenkins-logs",
         "mode": "RW"
       }
     ],
     "docker": {
       "image": "azulinho/ci-platform",
-      "network": "HOST",
-      "portMappings": [],
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 31002,
+          "hostPort": 31002,
+          "servicePort": 10007,
+          "protocol": "tcp",
+          "labels": {}
+        },
+        {
+          "containerPort": 31003,
+          "hostPort": 31003,
+          "servicePort": 10006,
+          "protocol": "tcp",
+          "labels": {}
+        },
+        {
+          "containerPort": 9000,
+          "hostPort": 31004,
+          "servicePort": 10015,
+          "protocol": "tcp",
+          "labels": {}
+        }
+      ],
       "privileged": false,
       "parameters": [],
       "forcePullImage": true
@@ -45,9 +67,10 @@
   },
   "env": {
     "JAVA_OPTS": " -Djava.awt.headless=true ",
+    "JENKINS_MESOS_LIBPROCESS_ADVERTISE_IP": "169.254.100.19",
     "JENKINS_HOME": "/var/lib/jenkins",
-    "LIBPROCESS_IP": "169.254.100.19",
-	"TEMPURL": "http://tempurl-endpoint.service.tinc-core-vpn/api?tempurl=jenkins_config_yml_local"
+    "JENKINS_MESOS_LIBPROCESS_ADVERTISE_PORT": "31004",
+    "TEMPURL": "http://tempurl-endpoint.service.tinc-core-vpn/api?tempurl=jenkins_config_yml_local"
   },
   "healthChecks": [
     {
@@ -55,23 +78,38 @@
       "intervalSeconds": 60,
       "timeoutSeconds": 20,
       "maxConsecutiveFailures": 3,
-      "port": 31002,
+      "portIndex": 0,
       "path": "/login",
       "protocol": "HTTP",
       "ignoreHttp1xx": false
     }
   ],
   "labels": {
+    "HAPROXY_2_GROUP": "external",
+    "HAPROXY_0_MODE": "http",
     "HAPROXY_1_PORT": "31003",
+    "HAPROXY_2_PORT": "31004",
+    "HAPROXY_1_MODE": "tcp",
     "HAPROXY_0_PORT": "31002",
     "HAPROXY_0_GROUP": "external",
     "HAPROXY_1_GROUP": "external",
-    "HAPROXY_1_VHOST": "jenkins-slave-port.service.tinc-core-vpn",
+    "HAPROXY_2_MODE": "tcp",
     "HAPROXY_0_VHOST": "jenkins.service.tinc-core-vpn"
   },
   "portDefinitions": [
     {
       "port": 10007,
+      "protocol": "tcp",
+      "name": "default",
+      "labels": {}
+    },
+    {
+      "port": 10006,
+      "protocol": "tcp",
+      "labels": {}
+    },
+    {
+      "port": 10015,
       "protocol": "tcp",
       "labels": {}
     }
