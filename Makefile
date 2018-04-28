@@ -6,13 +6,42 @@ clean: ## cleanup
 password: ## generates a hashPassword (salt='' password='')
 	python generate-password.py $(salt) $(password)
 
-build: ## builds the docker image
+
+stage0: ## builds the first layer
+	docker build  -t azulinho/ci-platform.stage0$$BRANCH -f Dockerfile.stage0 .
+	docker push azulinho/ci-platform.stage0$$BRANCH
+
+stage1: ## builds the mesos layer
+	docker pull azulinho/ci-platform.stage0$$BRANCH
+	docker build \
+		--build-arg MESOS_VERSION="` grep mesos_version config.yml | awk '{ print $$NF }'`" \
+		-t azulinho/ci-platform.stage1$$BRANCH -f Dockerfile.stage1 .
+	docker push azulinho/ci-platform.stage1$$BRANCH
+
+stage2: ## builds the jenkins layer
+	docker pull azulinho/ci-platform.stage1$$BRANCH
 	docker build \
 		--build-arg DEB_URL="` grep deb_url config.yml | awk '{ print $$NF }'`" \
+		-t azulinho/ci-platform.stage2$$BRANCH -f Dockerfile.stage2 .
+	docker push azulinho/ci-platform.stage2$$BRANCH
+
+stage3: ## finishes it all
+	docker pull azulinho/ci-platform.stage2$$BRANCH
+	docker build  -t azulinho/ci-platform.stage3$$BRANCH -f Dockerfile.stage3 .
+	docker push azulinho/ci-platform.stage3$$BRANCH
+
+build: ## builds the docker image
+	docker pull azulinho/ci-platform.stage3$$BRANCH
+	docker build \
 		-f Dockerfile  -t azulinho/ci-platform$$BRANCH .
+	docker push azulinho/ci-platform$$BRANCH
 
 push:
-	docker push azulinho/ci-platform
+	docker push azulinho/ci-platform.stage0$$BRANCH
+	docker push azulinho/ci-platform.stage1$$BRANCH
+	docker push azulinho/ci-platform.stage2$$BRANCH
+	docker push azulinho/ci-platform.stage3$$BRANCH
+	docker push azulinho/ci-platform$$BRANCH
 
 pull:
 	docker pull azulinho/ci-platform

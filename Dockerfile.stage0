@@ -1,0 +1,63 @@
+FROM  phusion/baseimage:0.9.18
+
+CMD ["/sbin/my_init"]
+
+RUN curl -sL https://jenkins-ci.org/debian/jenkins-ci.org.key | apt-key add -
+
+RUN curl -sl 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xDF7D54CBE56151BF' | \
+     awk '/-----BEGIN PGP PUBLIC KEY BLOCK-----/{flag=1}/-----END PGP PUBLIC KEY BLOCK-----/{print;flag=0}flag' | \
+     apt-key add -
+
+RUN apt-get update && \
+  DEBIAN_FRONTEND=noninteractive \
+    apt-get upgrade -y \
+        -o Dpkg::Options::="--force-confold" && \
+  apt-get install -y \
+    asciidoc \
+    autoconf \
+    build-essential \
+    bzr \
+    cvs \
+    cvsps \
+    daemon \
+    docbook-xsl \
+    dpkg-dev \
+    fakeroot \
+    gettext \
+    git \
+    groovy \
+    libapr1-dev \
+    libcurl4-nss-dev \
+    libdbd-sqlite3-perl \
+    libexpat1-dev \
+    libhttp-date-perl  \
+    libio-pty-perl \
+    libpcre3-dev \
+    libsasl2-dev \
+    libsasl2-modules \
+    libsvn-dev \
+    libsvn-perl \
+    libtool \
+    libyaml-dev \
+    libyaml-perl \
+    maven \
+    openjdk-7-jdk \
+    python-bzrlib \
+    python-dev \
+    python-pip \
+    python-six \
+    python-virtualenv \
+    subversion \
+    tar \
+    tcl \
+    unzip \
+    wget \
+    xmlto
+
+RUN apt-get clean && \
+	rm -rf /var/lib/apt/lists/* \
+	/tmp/* \
+	/var/tmp/* \
+	/var/cache/apt/archives/* \
+	/etc/apt/apt.conf \
+    /etc/apt/conf.d/18proxy
