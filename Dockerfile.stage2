@@ -8,6 +8,20 @@ RUN curl -sL "$DEB_URL" \
     rm -f /tmp/jenkins.deb && \
     rm -rf /var/lib/jenkins
 
+RUN add-apt-repository ppa:openjdk-r/ppa && \
+    apt-get update && \
+    apt-get install -y openjdk-8-jdk && \
+    update-alternatives --config java && \
+    update-alternatives --config javac
+
+RUN apt-get clean && \
+	rm -rf /var/lib/apt/lists/* \
+	/tmp/* \
+	/var/tmp/* \
+	/var/cache/apt/archives/* \
+	/etc/apt/apt.conf \
+    /etc/apt/conf.d/18proxy
+
 ADD requirements.txt .
 ADD render.py /render.py
 COPY templates/ /templates/

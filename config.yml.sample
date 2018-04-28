@@ -56,8 +56,9 @@ cloud_pem_keys:
 # the end of the playbook
 jenkins:
   # TODO make our docker image consume this version number
-  version: 2.0
-  deb_url: http://pkg.jenkins-ci.org/debian-rc/binary/jenkins_2.0_all.deb
+  version: 2.118
+  deb_url: http://pkg.jenkins-ci.org/debian/binary/jenkins_2.118_all.deb
+  mesos_version: 1.4.0
   dest: /opt/jenkins
   lib: /var/lib/jenkins
   # this url is also used by the Mesos plugin, so it must be accessible by
@@ -1479,7 +1480,7 @@ jenkins:
     { name: 'monitoring', version: '1.58.0'},
     { name: 'multiple-scms', version: '0.3'},
     { name: 'metrics', version: '3.1.2.9'},
-    { name: 'mesos', version: '0.12.0'},
+    { name: 'mesos', version: '0.16.0'},
     { name: 'naginator', version: '1.13'},
     { name: 'nested-view', version: '1.14'},
     { name: 'node-iterator-api', version: '1.5.0'},
