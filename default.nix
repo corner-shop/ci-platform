@@ -1,10 +1,9 @@
 with import <nixpkgs> {};
 with pkgs.python27Packages;
 
-buildPythonPackage { 
+stdenv.mkDerivation  {
   name = "impurePythonEnv";
   buildInputs = [
-    taglib
     openssl
     git
     libxml2
@@ -12,26 +11,23 @@ buildPythonPackage {
     libzip
     python27Full
     python27Packages.virtualenv
-    python27Packages.pip
     stdenv
     zlib ];
   src = null;
   # When used as `nix-shell --pure`
   shellHook = ''
+  PID=$$
   unset http_proxy
   export GIT_SSL_CAINFO=/etc/ssl/certs/ca-bundle.crt
-  virtualenv --no-wheel --no-setuptools venv 
-  wget -c https://bootstrap.pypa.io/get-pip.py
-  venv/bin/python get-pip.py
-  venv/bin/pip install -r requirements.txt --no-use-wheel
-  export PATH=$PWD/venv/bin:$PATH
-  '';
-  # used when building environments
-  extraCmds = ''
-  unset http_proxy # otherwise downloads will fail ("nodtd.invalid")
-  export GIT_SSL_CAINFO=/etc/ssl/certs/ca-bundle.clr_white
-  virtualenv venv
-  venv/bin/pip install -r requirements.txt --no-use-wheel
-  export PATH=$PWD/venv/bin:$PATH
+  # set SOURCE_DATE_EPOCH so that we can use python wheels
+  SOURCE_DATE_EPOCH=$(date +%s)
+  virtualenv --no-setuptools --clear --quiet /tmp/$PID/venv
+  rm -f get-pip.py
+  wget -q -c https://bootstrap.pypa.io/get-pip.py
+  /tmp/$PID/venv/bin/python get-pip.py
+  /tmp/$PID/venv/bin/pip install --quiet --upgrade -r requirements.txt
+  export PATH=/tmp/$PID/venv/bin:$PATH
+  rm -f venv
+  ln -s /tmp/$PID/venv venv
   '';
 }
