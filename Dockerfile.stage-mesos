@@ -1,0 +1,10 @@
+FROM  azulinho/ci-platform.stage0:master
+
+ARG MESOS_VERSION
+
+RUN curl -sL "http://archive.apache.org/dist/mesos/${MESOS_VERSION}/mesos-${MESOS_VERSION}.tar.gz" > /tmp/mesos.tgz && \
+    cd /tmp && tar xzf mesos.tgz && \
+    cd mesos-${MESOS_VERSION} && mkdir build && \
+    cd build && ../configure && make -j 4 V=0 && make install && \
+    cd /tmp && rm -rf /tmp/mesos*
+

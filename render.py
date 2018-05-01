@@ -10,11 +10,13 @@ from jinja2.environment import Environment
 from cStringIO import StringIO
 from multiprocessing import Pool
 from functools import partial
+from retrying import retry
 
 
 
 # TODO: REFACTOR this file
 
+@retry(stop_max_attempt_number=5)
 def download_plugin(params):
     (name, version) = params
     if not os.path.exists('target/var/lib/jenkins/'
@@ -63,7 +65,7 @@ def install_plugins(plugins):
 
     jobs = [ (p['name'],p['version']) for p in plugins ]
 
-    pool = Pool(processes=16)
+    pool = Pool(processes=8)
     pool.map(download_plugin, jobs)
 
 

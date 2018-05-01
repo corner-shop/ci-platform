@@ -1,10 +1,31 @@
 FROM  azulinho/ci-platform.stage0:master
 
+RUN add-apt-repository ppa:openjdk-r/ppa && \
+    apt-get update && \
+    apt-get install -y openjdk-8-jdk && \
+    update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java  && \
+    apt-get clean && \
+	rm -rf /var/lib/apt/lists/* \
+	/tmp/* \
+	/var/tmp/* \
+	/var/cache/apt/archives/* \
+	/etc/apt/apt.conf \
+    /etc/apt/conf.d/18proxy
+
+
 ARG MESOS_VERSION
 
 RUN curl -sL "http://archive.apache.org/dist/mesos/${MESOS_VERSION}/mesos-${MESOS_VERSION}.tar.gz" > /tmp/mesos.tgz && \
-    cd /tmp && tar xzf mesos.tgz && \
-    cd mesos-${MESOS_VERSION} && mkdir build && \
-    cd build && ../configure && make -j 4 V=0 && make install && \
-    cd /tmp && rm -rf /tmp/mesos*
+    cd /tmp && \
+    tar xzf mesos.tgz && \
+    cd mesos-${MESOS_VERSION} && \
+    mkdir build && \
+    cd build && \
+    export JAVA_TOOL_OPTIONS=-DadditionalJOption=-Xdoclint:none && \
+    ../configure && \
+    make -j 4 V=0 && \
+    make install && \
+    cd /tmp && \
+    rm -rf /tmp/mesos*
 
+RUN echo /usr/local/lib > /etc/container_environment/LD_LIBRARY_PATH

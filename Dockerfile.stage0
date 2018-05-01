@@ -41,7 +41,6 @@ RUN apt-get update && \
     libyaml-dev \
     libyaml-perl \
     maven \
-    openjdk-7-jdk \
     python-bzrlib \
     python-dev \
     python-pip \
@@ -52,12 +51,11 @@ RUN apt-get update && \
     tcl \
     unzip \
     wget \
-    xmlto
-
-RUN apt-get clean && \
-	rm -rf /var/lib/apt/lists/* \
-	/tmp/* \
-	/var/tmp/* \
-	/var/cache/apt/archives/* \
-	/etc/apt/apt.conf \
+    xmlto && \
+  apt-get clean && \
+    rm -rf /var/lib/apt/lists/* \
+    /tmp/* \
+    /var/tmp/* \
+    /var/cache/apt/archives/* \
+    /etc/apt/apt.conf \
     /etc/apt/conf.d/18proxy
